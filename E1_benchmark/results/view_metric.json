@@ -1,0 +1,50 @@
+{
+  "experiment": "camera-alignment metric derived from landmarks, validated against Tier 2 error",
+  "generated": "2026-08-21T15:35:47.023Z",
+  "engine_version": "ver7-D7.85",
+  "n_reps": 171,
+  "label_separation": {
+    "shoulder": {
+      "auc": 1,
+      "sag_median": 0.107,
+      "obl_median": 1.09
+    },
+    "hip": {
+      "auc": 1,
+      "sag_median": 0.085,
+      "obl_median": 0.659
+    },
+    "openness": {
+      "auc": 1,
+      "sag_median": 0.099,
+      "obl_median": 0.884
+    },
+    "visGap": {
+      "auc": 0.209,
+      "sag_median": 0.001,
+      "obl_median": 0
+    }
+  },
+  "error_correlation": {
+    "shoulder": 0.616,
+    "hip": 0.61,
+    "openness": 0.615,
+    "visGap": -0.212
+  },
+  "chosen": {
+    "metric": "openness",
+    "threshold": 0.3,
+    "basis": "dev split, max error gap"
+  },
+  "dev": {
+    "flagged_mae": 26.88,
+    "passed_mae": 5.99
+  },
+  "test": {
+    "flagged_n": 32,
+    "flagged_mae": 28.68,
+    "passed_n": 40,
+    "passed_mae": 5.11,
+    "gap": 23.57
+  }
+}

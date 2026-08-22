@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>KinetiQ E1 — Tier 2 (video → MediaPipe → production core)</title>
+
+<!--
+  tier2_harness.html — end-to-end product measurement
+  ====================================================
+  Feeds real dataset video frames through the SAME MediaPipe build, from the SAME
+  CDN host, with the SAME options as production, then into the verbatim
+  production measurement chain.
+
+  Frames are pre-decoded to JPEG by ffmpeg and fetched in order, rather than
+  seeking a <video> element. Seeking costs 50-100 ms per frame and is the
+  dominant cost at 5,000 frames; pre-decoding is both faster and exactly
+  reproducible, since every frame is visited once, in order, with no drops.
+
+  CDN host pinned to testingcf.jsdelivr.net to match production (CHANGELOG
+  D7.64/D7.65: switching hosts broke pose loading entirely).
+-->
+
+<script src="https://testingcf.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+<style>
+ body{font:13px/1.5 ui-monospace,Menlo,monospace;background:#0d0d0d;color:#ddd;margin:20px}
+ #log{white-space:pre;background:#000;border:1px solid #333;padding:10px;height:340px;overflow:auto}
+ .ok{color:#2ecc71}.warn{color:#f1c40f}.err{color:#e94560}.stat{color:#0fbcf9}
+</style>
+</head>
+<body>
+<h3>Tier 2 — video → MediaPipe → production core</h3>
+<div id="log">idle</div>
+
+<script src="./kinetiq_core.generated.js"></script>
+<script src="./harness_shim.js"></script>
+<script src="./replay.js"></script>
+<script>
+'use strict';
+const logEl=document.getElementById('log');
+function log(m,c){logEl.innerHTML+='\n'+(c?`<span class="${c}">${m}</span>`:m);logEl.scrollTop=logEl.scrollHeight;}
+
+// Production-identical configuration (index.html:103, 2960)
+const CAPS={deviceMemory:navigator.deviceMemory||8,cores:navigator.hardwareConcurrency||8};
+const MODEL_COMPLEXITY=(CAPS.deviceMemory>=4&&CAPS.cores>=4)?2:(CAPS.deviceMemory>=2&&CAPS.cores>=2)?1:0;
+const POSE_OPTIONS={modelComplexity:MODEL_COMPLEXITY,smoothLandmarks:true,enableSegmentation:false,
+                    minDetectionConfidence:0.6,minTrackingConfidence:0.6};
+
+let pose=null,pending=null;
+async function initPose(){
+  pose=new Pose({locateFile:f=>`https://testingcf.jsdelivr.net/npm/@mediapipe/pose/${f}`});
+  pose.setOptions(POSE_OPTIONS);
+  pose.onResults(r=>{const p=pending;pending=null;if(p)p(r);});
+  await pose.initialize();
+}
+function send(img){return new Promise((res,rej)=>{pending=res;pose.send({image:img}).catch(rej);});}
+
+async function runRecording(rec,nFrames,fps){
+  fps=fps||30;
+  if(!pose){log('initialising MediaPipe…');await initPose();
+            log(`  modelComplexity=${MODEL_COMPLEXITY} mem=${CAPS.deviceMemory} cores=${CAPS.cores}`);}
+
+  log(`\n${rec}: ${nFrames} frames`);
+  const t0=performance.now();
+  const frames=[];let detected=0,missed=0;
+
+  for(let i=0;i<nFrames;i++){
+    const url=`../data/frames/${rec}/f${String(i).padStart(5,'0')}.jpg`;
+    let bmp;
+    try{
+      const resp=await fetch(url);
+      if(!resp.ok){log(`  frame ${i} fetch ${resp.status} — stopping`,'err');break;}
+      bmp=await createImageBitmap(await resp.blob());
+    }catch(e){log(`  frame ${i} decode failed: ${e}`,'err');break;}
+
+    const r=await send(bmp);
+    bmp.close&&bmp.close();
+    const lm=r&&r.poseLandmarks?r.poseLandmarks:null;
+    if(lm)detected++;else missed++;
+    frames.push({t:i/fps,landmarks:lm});
+
+    if(i%300===0&&i>0){
+      const el=(performance.now()-t0)/1000;
+      log(`  ${i}/${nFrames}  ${(i/el).toFixed(1)} fps  eta ${((nFrames-i)/(i/el)).toFixed(0)}s  detected ${detected} missed ${missed}`,'stat');
+    }
+  }
+  const elapsed=(performance.now()-t0)/1000;
+  log(`  done: ${frames.length} frames in ${elapsed.toFixed(1)}s (${(frames.length/elapsed).toFixed(1)} fps), `+
+      `detection ${(100*detected/frames.length).toFixed(1)}%`, missed?'warn':'ok');
+
+  const usable=frames.filter(f=>f.landmarks);
+  const out=KinetiQReplay.replay(usable);
+  log(`  replay: ${out.repCount} repetitions detected`,'ok');
+
+  const payload={
+    recording:rec,
+    source:{dataset:'REHAB24-6',doi:'10.5281/zenodo.13305826',license:'CC BY-NC 4.0',
+            camera:'Camera18 (transposed 1080x1920)',frame_scale:'540x960 jpeg q4 (ffmpeg)',fps},
+    mediapipe:{options:POSE_OPTIONS,caps:CAPS,cdn:'testingcf.jsdelivr.net',
+               frames_total:frames.length,detected,missed,
+               detection_rate:detected/frames.length,elapsed_s:elapsed},
+    engine:out.meta,
+    // Full normalised landmark record. Persisting this is the point of the run:
+    // the limb KinetiQ analyses is a pure function of these visibilities, so the
+    // choice can be recovered exactly offline, and any later change to the
+    // measurement chain can be re-scored by replay without touching MediaPipe again.
+    landmarks:frames.map(f=>f.landmarks?f.landmarks.map(p=>[
+      Math.round(p.x*1e5)/1e5,Math.round(p.y*1e5)/1e5,
+      Math.round((p.z||0)*1e5)/1e5,Math.round((p.visibility||0)*1e3)/1e3]):null),
+    series:out.series,reps:out.reps,repEvents:out.repEvents,repCount:out.repCount,meta:out.meta,
+  };
+
+  // persist immediately, so an interrupted batch keeps what it already produced
+  try{
+    const body=JSON.stringify(payload);
+    const resp=await fetch(`/corpus/${rec}_corpus.json`,{method:'PUT',body});
+    const j=await resp.json();
+    log(`  corpus saved: ${(j.written/1e6).toFixed(1)} MB`,'ok');
+  }catch(e){log(`  corpus SAVE FAILED: ${e}`,'err');}
+
+  return payload;
+}
+
+window.E1T2={
+  runRecording,
+  results:{},
+  async run(rec,n,fps){const r=await runRecording(rec,n,fps);this.results[rec]=r;return {rec,reps:r.repCount,detection:r.mediapipe.detection_rate};},
+  config:{POSE_OPTIONS,MODEL_COMPLEXITY,CAPS},
+};
+log(`core ${KinetiQCore.KINETIQ_PROVENANCE.engine_version} `+
+    `(sha256 ${KinetiQCore.KINETIQ_PROVENANCE.source_sha256.slice(0,12)}…) ready`,'ok');
+</script>
+</body>
+</html>

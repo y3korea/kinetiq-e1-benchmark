@@ -1,0 +1,413 @@
+{
+  "experiment": "E1 Tier 2 — end-to-end product accuracy with perception isolated",
+  "generated": "2026-08-21T00:17:08.879Z",
+  "engine_version": "ver7-D7.66",
+  "source_sha256": "29b5a492daaa93b160cd16ec6a042c4a7cff2274f5a35699d87b657b88ce402f",
+  "dataset": {
+    "name": "REHAB24-6",
+    "doi": "10.5281/zenodo.13305826",
+    "license": "CC BY-NC 4.0",
+    "camera": "Camera18 (transposed 1080x1920, 30 fps)",
+    "exercise": "Ex6 Squats",
+    "annotated_repetitions": 191,
+    "recordings": 9
+  },
+  "mediapipe": [
+    {
+      "rec": "PM_008",
+      "detection_rate": 1,
+      "frames_total": 5191,
+      "detected": 5191,
+      "missed": 0,
+      "elapsed_s": 266,
+      "options": {
+        "modelComplexity": 2,
+        "smoothLandmarks": true,
+        "enableSegmentation": false,
+        "minDetectionConfidence": 0.6,
+        "minTrackingConfidence": 0.6
+      },
+      "cdn": "testingcf.jsdelivr.net"
+    },
+    {
+      "rec": "PM_022",
+      "detection_rate": 1,
+      "frames_total": 2757,
+      "detected": 2757,
+      "missed": 0,
+      "elapsed_s": 117,
+      "options": {
+        "modelComplexity": 2,
+        "smoothLandmarks": true,
+        "enableSegmentation": false,
+        "minDetectionConfidence": 0.6,
+        "minTrackingConfidence": 0.6
+      },
+      "cdn": "testingcf.jsdelivr.net"
+    },
+    {
+      "rec": "PM_029",
+      "detection_rate": 1,
+      "frames_total": 3090,
+      "detected": 3090,
+      "missed": 0,
+      "elapsed_s": 137,
+      "options": {
+        "modelComplexity": 2,
+        "smoothLandmarks": true,
+        "enableSegmentation": false,
+        "minDetectionConfidence": 0.6,
+        "minTrackingConfidence": 0.6
+      },
+      "cdn": "testingcf.jsdelivr.net"
+    },
+    {
+      "rec": "PM_038",
+      "detection_rate": 1,
+      "frames_total": 2474,
+      "detected": 2474,
+      "missed": 0,
+      "elapsed_s": 113,
+      "options": {
+        "modelComplexity": 2,
+        "smoothLandmarks": true,
+        "enableSegmentation": false,
+        "minDetectionConfidence": 0.6,
+        "minTrackingConfidence": 0.6
+      },
+      "cdn": "testingcf.jsdelivr.net"
+    },
+    {
+      "rec": "PM_043",
+      "detection_rate": 1,
+      "frames_total": 3464,
+      "detected": 3464,
+      "missed": 0,
+      "elapsed_s": 163,
+      "options": {
+        "modelComplexity": 2,
+        "smoothLandmarks": true,
+        "enableSegmentation": false,
+        "minDetectionConfidence": 0.6,
+        "minTrackingConfidence": 0.6
+      },
+      "cdn": "testingcf.jsdelivr.net"
+    },
+    {
+      "rec": "PM_105",
+      "detection_rate": 1,
+      "frames_total": 3288,
+      "detected": 3288,
+      "missed": 0,
+      "elapsed_s": 190,
+      "options": {
+        "modelComplexity": 2,
+        "smoothLandmarks": true,
+        "enableSegmentation": false,
+        "minDetectionConfidence": 0.6,
+        "minTrackingConfidence": 0.6
+      },
+      "cdn": "testingcf.jsdelivr.net"
+    },
+    {
+      "rec": "PM_113",
+      "detection_rate": 1,
+      "frames_total": 3899,
+      "detected": 3899,
+      "missed": 0,
+      "elapsed_s": 279,
+      "options": {
+        "modelComplexity": 2,
+        "smoothLandmarks": true,
+        "enableSegmentation": false,
+        "minDetectionConfidence": 0.6,
+        "minTrackingConfidence": 0.6
+      },
+      "cdn": "testingcf.jsdelivr.net"
+    },
+    {
+      "rec": "PM_118",
+      "detection_rate": 1,
+      "frames_total": 2463,
+      "detected": 2463,
+      "missed": 0,
+      "elapsed_s": 205,
+      "options": {
+        "modelComplexity": 2,
+        "smoothLandmarks": true,
+        "enableSegmentation": false,
+        "minDetectionConfidence": 0.6,
+        "minTrackingConfidence": 0.6
+      },
+      "cdn": "testingcf.jsdelivr.net"
+    },
+    {
+      "rec": "PM_126",
+      "detection_rate": 1,
+      "frames_total": 3402,
+      "detected": 3402,
+      "missed": 0,
+      "elapsed_s": 324,
+      "options": {
+        "modelComplexity": 2,
+        "smoothLandmarks": true,
+        "enableSegmentation": false,
+        "minDetectionConfidence": 0.6,
+        "minTrackingConfidence": 0.6
+      },
+      "cdn": "testingcf.jsdelivr.net"
+    }
+  ],
+  "limb_selection": {
+    "per_recording": [
+      {
+        "rec": "PM_008",
+        "chosen": "right",
+        "knee_mae_left": 29.43,
+        "knee_mae_right": 14.65,
+        "gap": 14.79
+      },
+      {
+        "rec": "PM_022",
+        "chosen": "right",
+        "knee_mae_left": 47.63,
+        "knee_mae_right": 11.53,
+        "gap": 36.11
+      },
+      {
+        "rec": "PM_029",
+        "chosen": "right",
+        "knee_mae_left": 22.31,
+        "knee_mae_right": 18.82,
+        "gap": 3.49
+      },
+      {
+        "rec": "PM_038",
+        "chosen": "right",
+        "knee_mae_left": 29.91,
+        "knee_mae_right": 19.69,
+        "gap": 10.22
+      },
+      {
+        "rec": "PM_043",
+        "chosen": "right",
+        "knee_mae_left": 25.33,
+        "knee_mae_right": 10.14,
+        "gap": 15.19
+      },
+      {
+        "rec": "PM_105",
+        "chosen": "right",
+        "knee_mae_left": 39.91,
+        "knee_mae_right": 8.45,
+        "gap": 31.46
+      },
+      {
+        "rec": "PM_113",
+        "chosen": "right",
+        "knee_mae_left": 42.29,
+        "knee_mae_right": 12.72,
+        "gap": 29.56
+      },
+      {
+        "rec": "PM_118",
+        "chosen": "right",
+        "knee_mae_left": 22.63,
+        "knee_mae_right": 13.44,
+        "gap": 9.2
+      },
+      {
+        "rec": "PM_126",
+        "chosen": "right",
+        "knee_mae_left": 31.13,
+        "knee_mae_right": 16.63,
+        "gap": 14.51
+      }
+    ],
+    "caveat": "The limb was chosen by best agreement because MediaPipe visibilities were not retained, so the app's actual selection was not observed. With a mean left/right gap of this size the choice matters, and the reported Tier 2 angle error is therefore a LOWER BOUND."
+  },
+  "control_vs_pixel": {
+    "recall": 0.7068062827225131,
+    "precision": 0.9375,
+    "matched": 135,
+    "missed": 56,
+    "fp": 9,
+    "knee": {
+      "n": 135,
+      "mae": 25.63,
+      "bias": -25.63,
+      "sd": 3.34,
+      "rmse": 25.84,
+      "p95": 30.95,
+      "max": 31.97
+    },
+    "hip": {
+      "n": 135,
+      "mae": 25.19,
+      "bias": -25.19,
+      "sd": 3.59,
+      "rmse": 25.44,
+      "p95": 30.97,
+      "max": 32.07
+    },
+    "trunk": {
+      "n": 135,
+      "mae": 14.24,
+      "bias": 14.24,
+      "sd": 1.89,
+      "rmse": 14.37,
+      "p95": 16.06,
+      "max": 19.89
+    },
+    "tempo_ratio_mean": 1.312
+  },
+  "tier2_vs_pixel": {
+    "recall": 0.900523560209424,
+    "precision": 0.9662921348314607,
+    "matched": 172,
+    "missed": 19,
+    "fp": 6,
+    "knee": {
+      "n": 172,
+      "mae": 14.02,
+      "bias": -6.82,
+      "sd": 14.72,
+      "rmse": 16.18,
+      "p95": 27.33,
+      "max": 58.59
+    },
+    "hip": {
+      "n": 172,
+      "mae": 21.52,
+      "bias": -19.78,
+      "sd": 13.14,
+      "rmse": 23.72,
+      "p95": 37.66,
+      "max": 41.36
+    },
+    "trunk": {
+      "n": 172,
+      "mae": 16.64,
+      "bias": 16.51,
+      "sd": 6.56,
+      "rmse": 17.76,
+      "p95": 24.03,
+      "max": 26
+    },
+    "tempo_ratio_mean": 0.945
+  },
+  "control_vs_appspace": {
+    "recall": 0.7068062827225131,
+    "precision": 1,
+    "matched": 135,
+    "missed": 0,
+    "fp": 0,
+    "knee": {
+      "n": 135,
+      "mae": 1.1,
+      "bias": 1.09,
+      "sd": 0.87,
+      "rmse": 1.4,
+      "p95": 2.64,
+      "max": 6.11
+    },
+    "hip": {
+      "n": 135,
+      "mae": 1.07,
+      "bias": 0.95,
+      "sd": 1.05,
+      "rmse": 1.42,
+      "p95": 2.66,
+      "max": 6.83
+    },
+    "trunk": {
+      "n": 135,
+      "mae": 0.5,
+      "bias": -0.26,
+      "sd": 0.87,
+      "rmse": 0.9,
+      "p95": 1.13,
+      "max": 5.91
+    },
+    "tempo_ratio_mean": 1.311
+  },
+  "tier2_vs_appspace": {
+    "recall": 0.900523560209424,
+    "precision": 1,
+    "matched": 172,
+    "missed": 0,
+    "fp": 0,
+    "knee": {
+      "n": 172,
+      "mae": 17.62,
+      "bias": 17.06,
+      "sd": 15.31,
+      "rmse": 22.89,
+      "p95": 49.5,
+      "max": 76.51
+    },
+    "hip": {
+      "n": 172,
+      "mae": 8.71,
+      "bias": 1.34,
+      "sd": 10.96,
+      "rmse": 11,
+      "p95": 23.67,
+      "max": 38.66
+    },
+    "trunk": {
+      "n": 172,
+      "mae": 5.6,
+      "bias": 3.67,
+      "sd": 6.14,
+      "rmse": 7.14,
+      "p95": 14.85,
+      "max": 16.68
+    },
+    "tempo_ratio_mean": 0.945
+  },
+  "aspect_note": "KinetiQ computes angles from MediaPipe normalised coordinates (x/W, y/H). That scaling is anisotropic when W != H and does not preserve angles. control_vs_appspace ~0 confirms the app is faithful to its own convention; control_vs_pixel is the resulting distortion.",
+  "perception_contribution": {
+    "knee": {
+      "control_mae": 25.63,
+      "tier2_mae": 14.02,
+      "delta_mae": -11.61
+    },
+    "hip": {
+      "control_mae": 25.19,
+      "tier2_mae": 21.52,
+      "delta_mae": -3.67
+    },
+    "trunk": {
+      "control_mae": 14.24,
+      "tier2_mae": 16.64,
+      "delta_mae": 2.4
+    }
+  },
+  "view_stratification": {
+    "sagittal": {
+      "n": 97,
+      "mae": 14.09,
+      "bias": -14.09,
+      "sd": 5.73,
+      "rmse": 15.2,
+      "p95": 23.68,
+      "max": 27.33
+    },
+    "oblique": {
+      "n": 75,
+      "mae": 13.93,
+      "bias": 2.58,
+      "sd": 17.3,
+      "rmse": 17.37,
+      "p95": 30.85,
+      "max": 58.59
+    }
+  },
+  "score_validity": {
+    "auc": 0.627,
+    "correct_mean": 82.24,
+    "incorrect_mean": 77.25
+  },
+  "scope_note": "Tier 2 is the end-to-end product figure for a single sagittal camera on this dataset. It is a benchmark against mocap-derived reference angles, not a clinical validation study, and generalises only to comparable conditions."
+}

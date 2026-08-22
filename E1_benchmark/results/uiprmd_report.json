@@ -1,0 +1,582 @@
+{
+  "experiment": "External validity — UI-PRMD deep squat (Vicon) through the deployed chain, landmark-interface injection (T1.5)",
+  "generated": "2026-08-22T04:00:30.266Z",
+  "engine_version": "ver7-D7.85",
+  "source_sha256": "803f34844fc02e99a533ec1ce052fe57f59d98628a123459236f56d93332d934",
+  "dataset": {
+    "name": "UI-PRMD",
+    "movement": "m01 deep squat",
+    "source": "Vicon markers (39), 100 Hz → 30 fps",
+    "subjects": 10,
+    "files_total": 200,
+    "episodes_scored": 198,
+    "exclusion_rules": {
+      "R1": "last frame below standing (3-D knee < 150°): repetition not completed in file",
+      "R2": "first frame below standing and a standing interval precedes the global minimum: file contains the tail of a previous movement"
+    },
+    "excluded_files": [
+      {
+        "stream": "s07_incorrect",
+        "subject": 7,
+        "label": "incorrect",
+        "file": "m01_s07_e04_positions_inc.txt",
+        "reason": "R1 ends below standing (last knee 113.5°): repetition not completed in file",
+        "knee3d_first": 170.07,
+        "knee3d_last": 113.48,
+        "knee3d_min": 113.48,
+        "duration_s": 1.13
+      },
+      {
+        "stream": "s07_incorrect",
+        "subject": 7,
+        "label": "incorrect",
+        "file": "m01_s07_e05_positions_inc.txt",
+        "reason": "R2 starts below standing (first knee 112.9°) with a standing interval before the global minimum (105.0°): file contains the tail of a previous movement",
+        "knee3d_first": 112.89,
+        "knee3d_last": 170.75,
+        "knee3d_min": 105.05,
+        "duration_s": 3.57
+      }
+    ],
+    "exclusion_note": "Exclusion is decided from the reference trajectory alone (3-D knee angle), never from application output. The raw trajectory of the excluded pair shows two full repetitions (minima 113° and 105°, separated by ~1.3 s above 150° with a 171° peak) that the dataset segmentation split across the two files — one file holds only a descent, the next an ascent plus a complete second repetition; the deployed chain detected both.",
+    "labels": "correct / incorrect as performed by the subjects (healthy volunteers simulating incorrect execution)",
+    "license": "ODC Public Domain Dedication and License v1.0 (as stated by the dataset authors)",
+    "citation": "A. Vakanski, H.-P. Jun, D. Paul, R. Baker, \"A data set of human body movements for physical rehabilitation exercises,\" Data, vol. 3, no. 1, 2, 2018, doi:10.3390/data3010002"
+  },
+  "injection": {
+    "tier": "T1.5",
+    "projection": "yaw 0 sagittal, yaw_sweep machinery",
+    "frame": "1280x960",
+    "near_side": "left",
+    "holds": "1.2 s standing holds between episodes; lead-in = first episode standing frame; hold frame = last frame (guard: first frame if the last is not standing — applies to no scored file)",
+    "hip_centre": "ASI/PSI midpoint per side"
+  },
+  "bootstrap": {
+    "B": 10000,
+    "unit": "subject",
+    "seed": 42
+  },
+  "depth_gate_deg": 135,
+  "n_matched_reps": 190,
+  "counting": {
+    "annotated": 198,
+    "matched": 190,
+    "false_positives": 0,
+    "recall": 0.96,
+    "precision": 1,
+    "below_gate": {
+      "n": 191,
+      "matched": 190,
+      "recall": 0.995
+    },
+    "above_gate": {
+      "n": 7,
+      "matched": 0,
+      "segments": [
+        {
+          "file": "m01_s01_e10_positions_inc.txt",
+          "gt2d_min_knee": 143.14,
+          "gt3d_min_knee": 141.27
+        },
+        {
+          "file": "m01_s04_e01_positions_inc.txt",
+          "gt2d_min_knee": 141.06,
+          "gt3d_min_knee": 139.79
+        },
+        {
+          "file": "m01_s07_e01_positions_inc.txt",
+          "gt2d_min_knee": 136.63,
+          "gt3d_min_knee": 134.84
+        },
+        {
+          "file": "m01_s07_e02_positions_inc.txt",
+          "gt2d_min_knee": 135.95,
+          "gt3d_min_knee": 136.83
+        },
+        {
+          "file": "m01_s07_e08_positions_inc.txt",
+          "gt2d_min_knee": 136.05,
+          "gt3d_min_knee": 136.66
+        },
+        {
+          "file": "m01_s09_e04_positions_inc.txt",
+          "gt2d_min_knee": 163.13,
+          "gt3d_min_knee": 158.77
+        },
+        {
+          "file": "m01_s09_e09_positions_inc.txt",
+          "gt2d_min_knee": 143.85,
+          "gt3d_min_knee": 124.4
+        }
+      ]
+    }
+  },
+  "estimates": {
+    "knee_mae_3d": {
+      "point": 3.507,
+      "ci95": [
+        2.375,
+        4.909
+      ]
+    },
+    "knee_bias_3d": {
+      "point": 2.268,
+      "ci95": [
+        0.516,
+        4.203
+      ]
+    },
+    "knee_sd_3d": {
+      "point": 4.212,
+      "ci95": [
+        2.475,
+        5.43
+      ]
+    },
+    "knee_loa_lo_3d": {
+      "point": -5.987,
+      "ci95": [
+        -8.245,
+        -2.914
+      ]
+    },
+    "knee_loa_hi_3d": {
+      "point": 10.523,
+      "ci95": [
+        6.074,
+        14.101
+      ]
+    },
+    "knee_srd_3d": {
+      "point": 11.675,
+      "ci95": [
+        6.859,
+        15.053
+      ]
+    },
+    "knee_mae_2d": {
+      "point": 1.531,
+      "ci95": [
+        1.124,
+        1.961
+      ]
+    },
+    "knee_bias_2d": {
+      "point": 1.531,
+      "ci95": [
+        1.124,
+        1.961
+      ]
+    },
+    "knee_sd_2d": {
+      "point": 1.022,
+      "ci95": [
+        0.572,
+        1.298
+      ]
+    },
+    "knee_loa_lo_2d": {
+      "point": -0.473,
+      "ci95": [
+        -0.85,
+        0.081
+      ]
+    },
+    "knee_loa_hi_2d": {
+      "point": 3.535,
+      "ci95": [
+        2.334,
+        4.425
+      ]
+    },
+    "knee_srd_2d": {
+      "point": 2.834,
+      "ci95": [
+        1.585,
+        3.599
+      ]
+    },
+    "hip_mae_3d": {
+      "point": 2.536,
+      "ci95": [
+        1.781,
+        3.473
+      ]
+    },
+    "hip_bias_3d": {
+      "point": -0.256,
+      "ci95": [
+        -1.084,
+        0.665
+      ]
+    },
+    "hip_sd_3d": {
+      "point": 3.428,
+      "ci95": [
+        2.276,
+        4.504
+      ]
+    },
+    "hip_loa_lo_3d": {
+      "point": -6.975,
+      "ci95": [
+        -9.6,
+        -4.303
+      ]
+    },
+    "hip_loa_hi_3d": {
+      "point": 6.462,
+      "ci95": [
+        4.14,
+        8.373
+      ]
+    },
+    "hip_srd_3d": {
+      "point": 9.501,
+      "ci95": [
+        6.308,
+        12.485
+      ]
+    },
+    "knee_mae_3d_correct": {
+      "point": 4.149,
+      "ci95": [
+        2.643,
+        6.238
+      ]
+    },
+    "knee_mae_3d_incorrect": {
+      "point": 2.793,
+      "ci95": [
+        1.796,
+        3.911
+      ]
+    },
+    "recall": {
+      "point": 0.96,
+      "ci95": [
+        0.912,
+        0.995
+      ]
+    },
+    "precision": {
+      "point": 1,
+      "ci95": [
+        1,
+        1
+      ]
+    },
+    "recall_below_gate": {
+      "point": 0.995,
+      "ci95": [
+        0.983,
+        1
+      ]
+    },
+    "auc": {
+      "point": 0.571,
+      "ci95": [
+        0.42,
+        0.754
+      ]
+    }
+  },
+  "bland_altman": {
+    "knee_vs_3d": {
+      "n": 190,
+      "mae": 3.51,
+      "bias": 2.27,
+      "sd": 4.21,
+      "loa_lower": -5.99,
+      "loa_upper": 10.52,
+      "srd": 11.67,
+      "bias_ci": [
+        0.516,
+        4.203
+      ],
+      "loa_lower_ci": [
+        -8.245,
+        -2.914
+      ],
+      "loa_upper_ci": [
+        6.074,
+        14.101
+      ]
+    },
+    "knee_vs_2d": {
+      "n": 190,
+      "mae": 1.53,
+      "bias": 1.53,
+      "sd": 1.02,
+      "loa_lower": -0.47,
+      "loa_upper": 3.54,
+      "srd": 2.83,
+      "bias_ci": [
+        1.124,
+        1.961
+      ],
+      "loa_lower_ci": [
+        -0.85,
+        0.081
+      ],
+      "loa_upper_ci": [
+        2.334,
+        4.425
+      ]
+    },
+    "hip_vs_3d": {
+      "n": 190,
+      "mae": 2.54,
+      "bias": -0.26,
+      "sd": 3.43,
+      "loa_lower": -6.97,
+      "loa_upper": 6.46,
+      "srd": 9.5,
+      "bias_ci": [
+        -1.084,
+        0.665
+      ],
+      "loa_lower_ci": [
+        -9.6,
+        -4.303
+      ],
+      "loa_upper_ci": [
+        4.14,
+        8.373
+      ]
+    }
+  },
+  "projection_floor_deg": {
+    "median": 0.66,
+    "mean": 0.74,
+    "pearson_r_vs_gt3d_knee": 0.176,
+    "note": "weak positive: deeper reps carry slightly more out-of-plane projection term"
+  },
+  "score_construct": {
+    "standards_knee_range_deg": [
+      80,
+      100
+    ],
+    "note": "repScore rewards a bottom knee angle inside STANDARDS (parallel-depth norm); UI-PRMD \"correct\" deep squats are deeper than that range, so the label and the score answer different questions",
+    "correct": {
+      "n": 100,
+      "gt3d_knee_median": 73.72,
+      "score_mean": 88.06
+    },
+    "incorrect": {
+      "n": 90,
+      "gt3d_knee_median": 91.65,
+      "score_mean": 85.16
+    }
+  },
+  "rehab24_6_yaw0_reference": {
+    "knee_mae_3d": 2.41,
+    "recall": 0.979,
+    "auc": 0.716
+  },
+  "rehab24_6_t15_reference": {
+    "source": "tier15_matched.csv (REHAB24-6 Ex6, OptiTrack, E1 T1.5 export: rehab24_6.project_to_sagittal + isotropic normalised landmarks, frame geometry not applied; engine ver7-D7.85)",
+    "method_note": "Different projection code from the yaw sweep that UI-PRMD uses; the sweep reproduces this tier at yaw 0° (knee MAE 2.41° vs 2.42°, bias 1.91° vs 1.92°, identical recall/precision/AUC), see rehab24_6_yaw0_reference.",
+    "knee_vs_3d": {
+      "n": 187,
+      "mae": 2.42,
+      "bias": 1.92,
+      "sd": 2.95,
+      "loa_lower": -3.86,
+      "loa_upper": 7.69,
+      "srd": 8.17
+    },
+    "knee_vs_2d": {
+      "n": 187,
+      "mae": 1.05,
+      "bias": 1.05,
+      "sd": 0.6,
+      "loa_lower": -0.14,
+      "loa_upper": 2.23,
+      "srd": 1.67
+    },
+    "projection_floor_deg": {
+      "median": 0.22,
+      "mean": 0.87
+    }
+  },
+  "per_subject": {
+    "1": {
+      "matched": 19,
+      "ann": 20,
+      "fp": 0,
+      "knee_mae_3d": 4.53,
+      "bias_3d": -2.13,
+      "chain_bias_2d": 2.52,
+      "projection_floor": -4.66,
+      "score_correct": 78.1,
+      "score_incorrect": 84.22
+    },
+    "2": {
+      "matched": 20,
+      "ann": 20,
+      "fp": 0,
+      "knee_mae_3d": 2.75,
+      "bias_3d": 2.51,
+      "chain_bias_2d": 1.88,
+      "projection_floor": 0.63,
+      "score_correct": 77.1,
+      "score_incorrect": 78.4
+    },
+    "3": {
+      "matched": 20,
+      "ann": 20,
+      "fp": 0,
+      "knee_mae_3d": 1.89,
+      "bias_3d": -1.3,
+      "chain_bias_2d": 0.65,
+      "projection_floor": -1.95,
+      "score_correct": 93.5,
+      "score_incorrect": 84.2
+    },
+    "4": {
+      "matched": 19,
+      "ann": 20,
+      "fp": 0,
+      "knee_mae_3d": 2.75,
+      "bias_3d": 1.96,
+      "chain_bias_2d": 2.78,
+      "projection_floor": -0.83,
+      "score_correct": 76.9,
+      "score_incorrect": 86.33
+    },
+    "5": {
+      "matched": 20,
+      "ann": 20,
+      "fp": 0,
+      "knee_mae_3d": 1.74,
+      "bias_3d": 1.01,
+      "chain_bias_2d": 0.7,
+      "projection_floor": 0.31,
+      "score_correct": 96.1,
+      "score_incorrect": 95.7
+    },
+    "6": {
+      "matched": 20,
+      "ann": 20,
+      "fp": 0,
+      "knee_mae_3d": 1.95,
+      "bias_3d": 1.7,
+      "chain_bias_2d": 1.29,
+      "projection_floor": 0.41,
+      "score_correct": 86.9,
+      "score_incorrect": 87.6
+    },
+    "7": {
+      "matched": 14,
+      "ann": 18,
+      "fp": 0,
+      "knee_mae_3d": 2.14,
+      "bias_3d": 2.14,
+      "chain_bias_2d": 0.94,
+      "projection_floor": 1.2,
+      "score_correct": 98.7,
+      "score_incorrect": 84
+    },
+    "8": {
+      "matched": 20,
+      "ann": 20,
+      "fp": 0,
+      "knee_mae_3d": 3.13,
+      "bias_3d": 3.13,
+      "chain_bias_2d": 1.47,
+      "projection_floor": 1.67,
+      "score_correct": 96,
+      "score_incorrect": 85.6
+    },
+    "9": {
+      "matched": 18,
+      "ann": 20,
+      "fp": 0,
+      "knee_mae_3d": 5.4,
+      "bias_3d": 5.1,
+      "chain_bias_2d": 1.52,
+      "projection_floor": 3.58,
+      "score_correct": 80.7,
+      "score_incorrect": 81.88
+    },
+    "10": {
+      "matched": 20,
+      "ann": 20,
+      "fp": 0,
+      "knee_mae_3d": 8.57,
+      "bias_3d": 8.57,
+      "chain_bias_2d": 1.49,
+      "projection_floor": 7.08,
+      "score_correct": 96.6,
+      "score_incorrect": 82.3
+    }
+  },
+  "unmatched_segments": [
+    {
+      "subject": 1,
+      "label": "incorrect",
+      "file": "m01_s01_e10_positions_inc.txt",
+      "gt2d_min_knee": 143.14,
+      "gt3d_min_knee": 141.27,
+      "above_gate": true
+    },
+    {
+      "subject": 4,
+      "label": "incorrect",
+      "file": "m01_s04_e01_positions_inc.txt",
+      "gt2d_min_knee": 141.06,
+      "gt3d_min_knee": 139.79,
+      "above_gate": true
+    },
+    {
+      "subject": 7,
+      "label": "incorrect",
+      "file": "m01_s07_e01_positions_inc.txt",
+      "gt2d_min_knee": 136.63,
+      "gt3d_min_knee": 134.84,
+      "above_gate": true
+    },
+    {
+      "subject": 7,
+      "label": "incorrect",
+      "file": "m01_s07_e02_positions_inc.txt",
+      "gt2d_min_knee": 135.95,
+      "gt3d_min_knee": 136.83,
+      "above_gate": true
+    },
+    {
+      "subject": 7,
+      "label": "incorrect",
+      "file": "m01_s07_e07_positions_inc.txt",
+      "gt2d_min_knee": 134.13,
+      "gt3d_min_knee": 133.07,
+      "above_gate": false
+    },
+    {
+      "subject": 7,
+      "label": "incorrect",
+      "file": "m01_s07_e08_positions_inc.txt",
+      "gt2d_min_knee": 136.05,
+      "gt3d_min_knee": 136.66,
+      "above_gate": true
+    },
+    {
+      "subject": 9,
+      "label": "incorrect",
+      "file": "m01_s09_e04_positions_inc.txt",
+      "gt2d_min_knee": 163.13,
+      "gt3d_min_knee": 158.77,
+      "above_gate": true
+    },
+    {
+      "subject": 9,
+      "label": "incorrect",
+      "file": "m01_s09_e09_positions_inc.txt",
+      "gt2d_min_knee": 143.85,
+      "gt3d_min_knee": 124.4,
+      "above_gate": true
+    }
+  ],
+  "scope_note": "Landmark injection from Vicon markers; MediaPipe perception bypassed. Measures the measurement chain and projection geometry on an independent cohort, not end-to-end accuracy. Hip centres approximated as ASI/PSI midpoints. Score AUC compares a parallel-depth scoring norm against a deep-squat correctness label (construct mismatch); it is reported, not claimed."
+}

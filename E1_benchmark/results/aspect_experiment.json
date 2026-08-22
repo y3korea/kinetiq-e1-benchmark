@@ -1,0 +1,164 @@
+{
+  "experiment": "aspect-ratio correction, replayed offline over persisted Tier 2 landmarks",
+  "generated": "2026-08-21T15:31:54.791Z",
+  "engine_version": "ver7-D7.85",
+  "source_sha256": "803f34844fc02e99a533ec1ce052fe57f59d98628a123459236f56d93332d934",
+  "frame": {
+    "width": 1080,
+    "height": 1920,
+    "aspect": 0.563
+  },
+  "limb_selection": {
+    "PM_008": {
+      "side": "left",
+      "left_frames": 5189,
+      "right_frames": 2,
+      "stability": 0.9996147177807744
+    },
+    "PM_022": {
+      "side": "left",
+      "left_frames": 2578,
+      "right_frames": 179,
+      "stability": 0.9350743561842583
+    },
+    "PM_029": {
+      "side": "left",
+      "left_frames": 3045,
+      "right_frames": 45,
+      "stability": 0.9854368932038835
+    },
+    "PM_038": {
+      "side": "left",
+      "left_frames": 2468,
+      "right_frames": 6,
+      "stability": 0.9975747776879548
+    },
+    "PM_043": {
+      "side": "left",
+      "left_frames": 3454,
+      "right_frames": 10,
+      "stability": 0.9971131639722863
+    },
+    "PM_105": {
+      "side": "left",
+      "left_frames": 3288,
+      "right_frames": 0,
+      "stability": 1
+    },
+    "PM_113": {
+      "side": "left",
+      "left_frames": 3899,
+      "right_frames": 0,
+      "stability": 1
+    },
+    "PM_118": {
+      "side": "left",
+      "left_frames": 2463,
+      "right_frames": 0,
+      "stability": 1
+    },
+    "PM_126": {
+      "side": "left",
+      "left_frames": 3402,
+      "right_frames": 0,
+      "stability": 1
+    }
+  },
+  "limb_note": "recovered exactly from landmark visibilities, which is what the app uses; this removes the lower-bound caveat that applied to the first Tier 2 run",
+  "annotated_repetitions": 191,
+  "conditions": {
+    "A": {
+      "label": "legacy: uncorrected + BOTTOM_TH 115 (D7.66 production)",
+      "recall": 0.901,
+      "precision": 0.966,
+      "matched": 172,
+      "fp": 6,
+      "knee": {
+        "n": 172,
+        "mae": 32.73,
+        "bias": -32.73,
+        "rmse": 39.05,
+        "p95": 77.64
+      },
+      "hip": {
+        "n": 172,
+        "mae": 38.38,
+        "bias": -38.38,
+        "rmse": 43.43,
+        "p95": 89.46
+      },
+      "trunk": {
+        "n": 172,
+        "mae": 13.03,
+        "bias": 11.66,
+        "rmse": 15.13,
+        "p95": 24.62
+      },
+      "auc": 0.627,
+      "score_correct": 82.16,
+      "score_incorrect": 77.15
+    },
+    "B": {
+      "label": "fix-only: corrected + BOTTOM_TH 115 (counterfactual)",
+      "recall": 0.791,
+      "precision": 0.962,
+      "matched": 151,
+      "fp": 6,
+      "knee": {
+        "n": 151,
+        "mae": 15.89,
+        "bias": -9.01,
+        "rmse": 24.86,
+        "p95": 58.85
+      },
+      "hip": {
+        "n": 151,
+        "mae": 18.56,
+        "bias": -16.81,
+        "rmse": 27.52,
+        "p95": 65.8
+      },
+      "trunk": {
+        "n": 151,
+        "mae": 5.92,
+        "bias": -0.91,
+        "rmse": 7.14,
+        "p95": 12.67
+      },
+      "auc": 0.75,
+      "score_correct": 86.99,
+      "score_incorrect": 79.65
+    },
+    "C": {
+      "label": "current: corrected + core default 135 (D7.85 production)",
+      "recall": 0.895,
+      "precision": 0.961,
+      "matched": 171,
+      "fp": 7,
+      "knee": {
+        "n": 171,
+        "mae": 15.16,
+        "bias": -8.46,
+        "rmse": 23.8,
+        "p95": 56.04
+      },
+      "hip": {
+        "n": 171,
+        "mae": 17.4,
+        "bias": -14.97,
+        "rmse": 26.17,
+        "p95": 65.75
+      },
+      "trunk": {
+        "n": 171,
+        "mae": 6.49,
+        "bias": -1.93,
+        "rmse": 7.73,
+        "p95": 13.46
+      },
+      "auc": 0.71,
+      "score_correct": 84.25,
+      "score_incorrect": 77.47
+    }
+  }
+}

@@ -1,0 +1,5 @@
+video_id,person_id,rep,correctness,ref_min_knee,ref_max_knee_in_rep,window_max_knee,crosses_bottom_th
+PM_113,8,3,1,84.53,176.91,176.91,1
+PM_113,8,5,1,78.11,156.9,156.9,1
+PM_113,8,7,0,68.2,174.17,174.17,1
+PM_126,7,1,1,100.13,155.24,155.24,1

@@ -1,0 +1,26 @@
+ 0: Hips
+ 1: Spine
+ 2: Spine1
+ 3: Neck
+ 4: Head
+ 5: Head_end
+ 6: LeftShoulder
+ 7: LeftArm
+ 8: LeftForeArm
+ 9: LeftHand
+10: LeftHand_end
+11: RightShoulder
+12: RightArm
+13: RightForeArm
+14: RightHand
+15: RightHand_end
+16: LeftUpLeg
+17: LeftLeg
+18: LeftFoot
+19: LeftToeBase
+20: LeftToeBase_end
+21: RightUpLeg
+22: RightLeg
+23: RightFoot
+24: RightToeBase
+25: RightToeBase_end

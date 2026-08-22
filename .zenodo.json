@@ -1,0 +1,52 @@
+{
+  "title": "KinetiQ E1 — verbatim-extraction measurement-accuracy benchmark harness and per-repetition outputs",
+  "description": "Benchmark harness, extracted measurement core, per-repetition outputs and figure scripts supporting the manuscript \"Benchmarking the Deployed Artifact: Verbatim-Extraction Testing and Viewing-Angle Error Decomposition of a Browser-Based Markerless Movement Assessment Platform\" (submitted to IEEE Journal of Biomedical and Health Informatics). The harness slices the measurement functions of a deployed single-page web application from its shipped source by line range, records a SHA-256 for each, and executes them unmodified against three reference tiers (analytic synthetic kinematics; motion-capture trajectories injected at the landmark interface, REHAB24-6 and UI-PRMD; and end-to-end video through the production MediaPipe configuration). Raw datasets are not redistributed here: REHAB24-6 (doi:10.5281/zenodo.13305826, CC BY-NC 4.0) and UI-PRMD (University of Idaho, ODC-PDDL v1.0) must be obtained from their original sources.",
+  "license": {
+    "id": "MIT"
+  },
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Heo, Seoyoon",
+      "orcid": "0000-0003-0763-8245",
+      "affiliation": "Kyungbok University, Republic of Korea"
+    },
+    {
+      "name": "Choi, Taeseok",
+      "orcid": "0000-0003-0858-121X",
+      "affiliation": "Kunjang University College, Republic of Korea"
+    },
+    {
+      "name": "Jang, Yusung",
+      "orcid": "0000-0002-9770-3911",
+      "affiliation": "Changshin University, Republic of Korea"
+    },
+    {
+      "name": "Choi, Wansuk",
+      "orcid": "0000-0003-1324-6723",
+      "affiliation": "Kyungwoon University, Republic of Korea"
+    }
+  ],
+  "keywords": [
+    "markerless motion capture",
+    "pose estimation",
+    "measurement validity",
+    "software benchmark",
+    "MediaPipe",
+    "reproducibility",
+    "telerehabilitation"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.13305826",
+      "relation": "references",
+      "resource_type": "dataset"
+    },
+    {
+      "identifier": "10.3390/data3010002",
+      "relation": "references",
+      "resource_type": "publication-article"
+    }
+  ],
+  "grants": []
+}

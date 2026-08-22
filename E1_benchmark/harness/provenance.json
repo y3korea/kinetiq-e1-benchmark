@@ -1,0 +1,155 @@
+{
+  "generated_by": "E1_benchmark/harness/extract_core.cjs",
+  "source_file": "squat-app/index.html",
+  "source_sha256": "803f34844fc02e99a533ec1ce052fe57f59d98628a123459236f56d93332d934",
+  "source_bytes": 1183595,
+  "source_mtime": "2026-08-21T15:05:21.122Z",
+  "engine_version": "ver7-D7.85",
+  "extracted": [
+    {
+      "name": "STANDARDS",
+      "kind": "const",
+      "startLine": 2666,
+      "endLine": 2672,
+      "bytes": 502,
+      "sha256": "1c949a1976389f1195c2477535fa72253976d339fd268e42512bbf801a9061c2"
+    },
+    {
+      "name": "BODY_ADJ",
+      "kind": "const",
+      "startLine": 2673,
+      "endLine": 2675,
+      "bytes": 133,
+      "sha256": "988b98ca2ae408a2790621eb2796625574d575fdd53c23a2d55443c29af1c312"
+    },
+    {
+      "name": "getStd",
+      "kind": "function",
+      "startLine": 2676,
+      "endLine": 2680,
+      "bytes": 382,
+      "sha256": "1fb79520cf1d47f60926514eec67964d0a5dcf0f16f3ba5ce2fadf6edeaf9f8c"
+    },
+    {
+      "name": "getACSM",
+      "kind": "function",
+      "startLine": 2682,
+      "endLine": 2682,
+      "bytes": 188,
+      "sha256": "ae19ec7453ae9c556a7869cb53f6d831267e3ed614940f5b2fd742ede21e62ab"
+    },
+    {
+      "name": "dev",
+      "kind": "function",
+      "startLine": 2683,
+      "endLine": 2683,
+      "bytes": 80,
+      "sha256": "11eef8c772b90d6aa06c7de30c88231634d9285fa681e06c961753d97e961620"
+    },
+    {
+      "name": "onPoseResults",
+      "kind": "function",
+      "startLine": 3308,
+      "endLine": 3369,
+      "bytes": 3756,
+      "sha256": "768899d2914f608b1ca2cd8b7e04eba645b554d804be3b155b54b86e9818f2a2"
+    },
+    {
+      "name": "calcAngle",
+      "kind": "function",
+      "startLine": 3117,
+      "endLine": 3117,
+      "bytes": 261,
+      "sha256": "6f2cdfefef004f56e56692ca4537051b48d71cc123e96fd4f46c05a03517ea48"
+    },
+    {
+      "name": "calcTrunk",
+      "kind": "function",
+      "startLine": 3134,
+      "endLine": 3134,
+      "bytes": 94,
+      "sha256": "eaa4d695ea06041adf665511fda7c1740e79fb5b709fc3af9fcb646999f5475c"
+    },
+    {
+      "name": "calcAsymmetry",
+      "kind": "function",
+      "startLine": 3275,
+      "endLine": 3305,
+      "bytes": 1552,
+      "sha256": "2dc5529a4333c092e0e1c0ea03fbd89513a040a1c1ad6e1310cd8d13fe34da75"
+    },
+    {
+      "name": "kqViewOpenness",
+      "kind": "function",
+      "startLine": 3146,
+      "endLine": 3161,
+      "bytes": 1128,
+      "sha256": "c3040165c4d25d3de55bfb36b436eb16197953c2d054ab96d7d671a674ec6edf"
+    },
+    {
+      "name": "KQ_VIEW_GOOD",
+      "kind": "const",
+      "startLine": 3176,
+      "endLine": 3176,
+      "bytes": 24,
+      "sha256": "4af9ebb5465b87c50723dc022adca68eb47dd5c09c7d61c508672b8b9d68bbd9"
+    },
+    {
+      "name": "KQ_VIEW_WARN",
+      "kind": "const",
+      "startLine": 3177,
+      "endLine": 3177,
+      "bytes": 24,
+      "sha256": "257f66fc77d121f4530fcc83e9bb1b39a141ec2d3003f4ae849504f2db78968b"
+    },
+    {
+      "name": "kqViewGrade",
+      "kind": "function",
+      "startLine": 3268,
+      "endLine": 3273,
+      "bytes": 429,
+      "sha256": "0d23ad571457debc245d44a93ec6e025db2f3cce2e51ce8d7066b82e9c2d9836"
+    },
+    {
+      "name": "smooth",
+      "kind": "function",
+      "startLine": 3306,
+      "endLine": 3306,
+      "bytes": 105,
+      "sha256": "c084911c865c62510e3e205a275936100049bb44f136a2bf74505b1b479d4a94"
+    },
+    {
+      "name": "detectPhase",
+      "kind": "function",
+      "startLine": 3380,
+      "endLine": 3478,
+      "bytes": 6849,
+      "sha256": "64a06d344ab463bf2a2b449c512e143bfb31d0a6c85e9df0a5e77f394817a7c4"
+    },
+    {
+      "name": "completeRep",
+      "kind": "function",
+      "startLine": 3568,
+      "endLine": 3585,
+      "bytes": 1245,
+      "sha256": "87bc413c278ff6b9d0689b294df2c3ad7e63b6dd212db550cab562051a6e57f8"
+    },
+    {
+      "name": "repScore",
+      "kind": "function",
+      "startLine": 3775,
+      "endLine": 3784,
+      "bytes": 814,
+      "sha256": "357dfb0cecb8ca192d63ff8b95e27157e0d9c3bcd6039f0c24f7d38cb3e1b22e"
+    }
+  ],
+  "patches": [
+    {
+      "function": "detectPhase",
+      "hook": "__E1_TH",
+      "reason": "experiment scripts override STAND/BOTTOM_TH/PARALLEL_TH per condition; inert when __E1_TH is null",
+      "original": "const STAND=160,BOTTOM_TH=Math.min(ACSM.knee.max+35,145),PARALLEL_TH=150;",
+      "patched": "const __TH=(typeof globalThis!=='undefined'&&globalThis.__E1_TH)||null;const STAND=__TH?__TH.stand:160,BOTTOM_TH=__TH?__TH.bottom:Math.min(ACSM.knee.max+35,145),PARALLEL_TH=__TH?__TH.parallel:150;"
+    }
+  ]
+}

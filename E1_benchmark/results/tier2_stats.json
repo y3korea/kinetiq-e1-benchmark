@@ -1,0 +1,232 @@
+{
+  "experiment": "Tier 2 statistical strengthening: recording-level bootstrap CIs, Bland-Altman agreement, SRD",
+  "generated": "2026-08-22T02:21:53.285Z",
+  "engine_version": "ver7-D7.85",
+  "bootstrap": {
+    "B": 10000,
+    "unit": "recording",
+    "seed": 42,
+    "n_recordings": 9,
+    "n_matched_reps": 171
+  },
+  "point_estimates_verified_against": "tier2_production.json",
+  "estimates": {
+    "knee_mae": {
+      "point": 15.16,
+      "ci95": {
+        "lo": 10.108,
+        "hi": 20.014,
+        "n_boot": 10000
+      }
+    },
+    "knee_bias": {
+      "point": -8.456,
+      "ci95": {
+        "lo": -15.494,
+        "hi": -1.338,
+        "n_boot": 10000
+      }
+    },
+    "hip_mae": {
+      "point": 17.402,
+      "ci95": {
+        "lo": 10.351,
+        "hi": 24.935,
+        "n_boot": 10000
+      }
+    },
+    "hip_bias": {
+      "point": -14.975,
+      "ci95": {
+        "lo": -23.985,
+        "hi": -6.247,
+        "n_boot": 10000
+      }
+    },
+    "trunk_mae": {
+      "point": 6.492,
+      "ci95": {
+        "lo": 5.44,
+        "hi": 7.566,
+        "n_boot": 10000
+      }
+    },
+    "trunk_bias": {
+      "point": -1.932,
+      "ci95": {
+        "lo": -3.566,
+        "hi": -0.25,
+        "n_boot": 10000
+      }
+    },
+    "sag_knee_mae": {
+      "point": 5.627,
+      "ci95": {
+        "lo": 4.441,
+        "hi": 6.66,
+        "n_boot": 10000
+      }
+    },
+    "obl_knee_mae": {
+      "point": 27.656,
+      "ci95": {
+        "lo": 15.494,
+        "hi": 39.675,
+        "n_boot": 10000
+      }
+    },
+    "recall": {
+      "point": 0.895,
+      "ci95": {
+        "lo": 0.824,
+        "hi": 0.966,
+        "n_boot": 10000
+      }
+    },
+    "precision": {
+      "point": 0.961,
+      "ci95": {
+        "lo": 0.917,
+        "hi": 0.994,
+        "n_boot": 10000
+      }
+    },
+    "auc": {
+      "point": 0.71,
+      "ci95": {
+        "lo": 0.631,
+        "hi": 0.792,
+        "n_boot": 10000
+      }
+    }
+  },
+  "bland_altman": {
+    "all": {
+      "knee": {
+        "n": 171,
+        "bias": -8.46,
+        "sd_diff": 22.32,
+        "loa_lower": -52.19,
+        "loa_upper": 35.28,
+        "srd": 61.85,
+        "bias_ci": [
+          -15.55,
+          -1.36
+        ],
+        "loa_lower_ci": [
+          -65.92,
+          -32.27
+        ],
+        "loa_upper_ci": [
+          27.5,
+          40.94
+        ]
+      },
+      "hip": {
+        "n": 171,
+        "bias": -14.97,
+        "sd_diff": 21.52,
+        "loa_lower": -57.16,
+        "loa_upper": 27.21,
+        "srd": 59.66,
+        "bias_ci": [
+          -24.19,
+          -6.01
+        ],
+        "loa_lower_ci": [
+          -71.56,
+          -34.45
+        ],
+        "loa_upper_ci": [
+          15.67,
+          32.86
+        ]
+      }
+    },
+    "sagittal": {
+      "knee": {
+        "n": 97,
+        "bias": 4.44,
+        "sd_diff": 4.55,
+        "loa_lower": -4.48,
+        "loa_upper": 13.37,
+        "srd": 12.63,
+        "bias_ci": [
+          2.25,
+          6.29
+        ],
+        "loa_lower_ci": [
+          -7.03,
+          -0.42
+        ],
+        "loa_upper_ci": [
+          10.78,
+          14.86
+        ]
+      },
+      "hip": {
+        "n": 97,
+        "bias": -8.17,
+        "sd_diff": 9.15,
+        "loa_lower": -26.1,
+        "loa_upper": 9.76,
+        "srd": 25.36,
+        "bias_ci": [
+          -14.61,
+          -3.29
+        ],
+        "loa_lower_ci": [
+          -36.66,
+          -14.63
+        ],
+        "loa_upper_ci": [
+          -0.06,
+          15.47
+        ]
+      }
+    },
+    "oblique": {
+      "knee": {
+        "n": 74,
+        "bias": -25.37,
+        "sd_diff": 24.93,
+        "loa_lower": -74.22,
+        "loa_upper": 23.49,
+        "srd": 69.09,
+        "bias_ci": [
+          -39.25,
+          -10.66
+        ],
+        "loa_lower_ci": [
+          -88.99,
+          -48.72
+        ],
+        "loa_upper_ci": [
+          -0.28,
+          36.76
+        ]
+      },
+      "hip": {
+        "n": 74,
+        "bias": -23.9,
+        "sd_diff": 28.75,
+        "loa_lower": -80.24,
+        "loa_upper": 32.45,
+        "srd": 79.68,
+        "bias_ci": [
+          -40.57,
+          -6.51
+        ],
+        "loa_lower_ci": [
+          -96.77,
+          -45.8
+        ],
+        "loa_upper_ci": [
+          8.62,
+          43.47
+        ]
+      }
+    }
+  },
+  "scope_note": "SRD is derived from the dispersion of error against mocap-derived reference angles, NOT from test-retest repeated measurement; it bounds detectable change under this error model only. One dataset, one camera geometry. Not a clinical validation study."
+}

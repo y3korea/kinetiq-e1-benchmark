@@ -1,0 +1,79 @@
+{
+  "experiment": "E1 Tier 1.5 — REHAB24-6 mocap into verbatim production core (perception bypassed)",
+  "generated": "2026-08-21T15:31:14.131Z",
+  "engine_version": "ver7-D7.85",
+  "source_sha256": "803f34844fc02e99a533ec1ce052fe57f59d98628a123459236f56d93332d934",
+  "dataset": {
+    "name": "REHAB24-6",
+    "doi": "10.5281/zenodo.13305826",
+    "license": "CC BY-NC 4.0",
+    "citation": "Cernek A., Sedmidubsky J., Budikova P. REHAB24-6. SISAP 2024.",
+    "exercise": "Ex6 Squats",
+    "recordings": 9,
+    "annotated_repetitions": 191,
+    "reference": "OptiTrack 41-marker mocap -> 26-joint skeleton, 30 fps"
+  },
+  "method": {
+    "replay_unit": "whole recording (continuous session)",
+    "matching": "detection time within [annotated_start, annotated_end + 0.75s]",
+    "projection": "anatomical sagittal plane, perpendicular to the hip-to-hip axis",
+    "perception": "bypassed — mocap joints substituted for MediaPipe landmarks"
+  },
+  "rep_counting": {
+    "annotated": 191,
+    "detected": 198,
+    "matched": 187,
+    "missed": 4,
+    "false_positives": 11,
+    "recall": 0.979,
+    "precision": 0.944
+  },
+  "angle_agreement": {
+    "knee": {
+      "n": 187,
+      "mae": 1.05,
+      "bias": 1.05,
+      "sd": 0.6,
+      "rmse": 1.21,
+      "p95": 2.01,
+      "max": 4.06
+    },
+    "hip": {
+      "n": 187,
+      "mae": 1.05,
+      "bias": 1.04,
+      "sd": 0.82,
+      "rmse": 1.32,
+      "p95": 1.99,
+      "max": 9.08
+    },
+    "trunk": {
+      "n": 187,
+      "mae": 0.41,
+      "bias": -0.33,
+      "sd": 0.6,
+      "rmse": 0.68,
+      "p95": 0.93,
+      "max": 6.65
+    }
+  },
+  "projection_term_knee": {
+    "mean": 0.87,
+    "sd": 3
+  },
+  "tempo": {
+    "true_median_s": 1.53,
+    "app_median_s": 1.47,
+    "ratio_mean": 1.069,
+    "ratio_sd": 0.653,
+    "at_clamp_floor_pct": 0
+  },
+  "score_validity": {
+    "correct_mean": 89.59,
+    "incorrect_mean": 84.12,
+    "auc": 0.716,
+    "n_correct": 127,
+    "n_incorrect": 60
+  },
+  "scope_note": "Perception bypassed. Establishes application-logic behaviour on real human movement with an ideal input. NOT a measurement-validity study of the deployed camera pipeline; that requires Tier 2 (video through MediaPipe)."
+}

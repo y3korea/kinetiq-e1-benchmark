@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+title: "KinetiQ E1 — verbatim-extraction measurement-accuracy benchmark harness"
+message: "If you use this harness or its outputs, please cite the accompanying paper."
+type: software
+license: MIT
+authors:
+  - family-names: Heo
+    given-names: Seoyoon
+    orcid: "https://orcid.org/0000-0003-0763-8245"
+    affiliation: "Department of Occupational Therapy, Kyungbok University, Republic of Korea"
+  - family-names: Choi
+    given-names: Taeseok
+    orcid: "https://orcid.org/0000-0003-0858-121X"
+    affiliation: "Department of Physical Therapy, Kunjang University College, Republic of Korea"
+  - family-names: Jang
+    given-names: Yusung
+    orcid: "https://orcid.org/0000-0002-9770-3911"
+    affiliation: "Department of Physical Therapy, Changshin University, Republic of Korea"
+  - family-names: Choi
+    given-names: Wansuk
+    orcid: "https://orcid.org/0000-0003-1324-6723"
+    affiliation: "Department of Physical Therapy, Kyungwoon University, Republic of Korea"
+keywords:
+  - markerless motion capture
+  - pose estimation
+  - measurement validity
+  - software benchmark
+  - MediaPipe
+  - reproducibility
+repository-code: "https://github.com/y3korea/kinetiq-e1-benchmark"

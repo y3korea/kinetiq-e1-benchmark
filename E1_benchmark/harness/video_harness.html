@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>KinetiQ E1 — video harness (Tier 1 / Tier 2)</title>
+
+<!--
+  video_harness.html — offline video replay through the production pipeline
+  ==========================================================================
+
+  Runs the SAME MediaPipe build, from the SAME CDN host, with the SAME options
+  as production, then feeds the resulting landmarks into the verbatim production
+  core. The only differences from live operation are deliberate and disclosed:
+
+    1. Frames come from a video file, not a camera.
+    2. Frames are visited by deterministic seek rather than realtime playback,
+       so a run is reproducible and no frame is dropped.
+    3. Time is video time (virtual clock in harness_shim.js).
+
+  CDN host is pinned to testingcf.jsdelivr.net to match production exactly —
+  see CHANGELOG D7.64/D7.65, where switching hosts caused a regression.
+-->
+
+<script src="https://testingcf.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+
+<style>
+  body { font: 14px/1.5 -apple-system, system-ui, sans-serif; margin: 24px; background: #111; color: #eee; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  .sub { color: #888; margin-bottom: 20px; }
+  #log { background: #000; border: 1px solid #333; padding: 12px; height: 260px;
+         overflow: auto; font-family: ui-monospace, Menlo, monospace; font-size: 12px; white-space: pre; }
+  video, canvas { max-width: 420px; border: 1px solid #333; }
+  .row { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; }
+  .stat { color: #0fbcf9; }
+  .warn { color: #f1c40f; }
+  .err { color: #e94560; }
+</style>
+</head>
+<body>
+
+<h1>KinetiQ E1 — video harness</h1>
+<div class="sub">deterministic offline replay · production MediaPipe config · virtual clock</div>
+
+<div class="row">
+  <video id="video" playsinline muted controls></video>
+  <canvas id="canvas" width="1280" height="720"></canvas>
+</div>
+
+<div class="row">
+  <input type="file" id="file" accept="video/*">
+  <button id="run" disabled>run</button>
+  <button id="download" disabled>download result</button>
+</div>
+
+<div id="log">ready.</div>
+
+<script src="./kinetiq_core.generated.js"></script>
+<script src="./harness_shim.js"></script>
+<script src="./replay.js"></script>
+
+<script>
+'use strict';
+
+const logEl = document.getElementById('log');
+function log(msg, cls) {
+  const line = cls ? `<span class="${cls}">${msg}</span>` : msg;
+  logEl.innerHTML += '\n' + line;
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+// --------------------------------------------------------------------------
+// Production-identical MediaPipe configuration.
+// modelComplexity mirrors the adaptive rule in index.html:103 — on the
+// benchmark machine (>=4 GB, >=4 cores) production selects 2. The value
+// actually used is recorded in the result metadata so a run on a weaker
+// machine is not silently compared against one on a stronger machine.
+// --------------------------------------------------------------------------
+const CAPS = {
+  deviceMemory: navigator.deviceMemory || 8,
+  cores: navigator.hardwareConcurrency || 8,
+};
+const MODEL_COMPLEXITY =
+  (CAPS.deviceMemory >= 4 && CAPS.cores >= 4) ? 2 :
+  (CAPS.deviceMemory >= 2 && CAPS.cores >= 2) ? 1 : 0;
+
+const POSE_OPTIONS = {
+  modelComplexity: MODEL_COMPLEXITY,
+  smoothLandmarks: true,
+  enableSegmentation: false,
+  minDetectionConfidence: 0.6,
+  minTrackingConfidence: 0.6,
+};
+
+let pose = null;
+let poseReady = null;
+
+function initPose() {
+  pose = new Pose({ locateFile: f => `https://testingcf.jsdelivr.net/npm/@mediapipe/pose/${f}` });
+  pose.setOptions(POSE_OPTIONS);
+  // Landmarks are collected here and replayed through the core afterwards, so
+  // that pose estimation and the measurement chain stay separable in analysis.
+  pose.onResults(r => { if (pendingResolve) { pendingResolve(r); pendingResolve = null; } });
+  poseReady = pose.initialize();
+  return poseReady;
+}
+
+let pendingResolve = null;
+function sendFrame(imageEl) {
+  return new Promise((resolve, reject) => {
+    pendingResolve = resolve;
+    pose.send({ image: imageEl }).catch(reject);
+  });
+}
+
+// --------------------------------------------------------------------------
+// Deterministic seek: visit every frame at a fixed cadence.
+//
+// HTMLVideoElement has no frame-exact API in all browsers; requestVideoFrame-
+// Callback is used where available, otherwise we seek to fixed timestamps.
+// Either way each target time is visited exactly once, in order.
+// --------------------------------------------------------------------------
+function seekTo(video, t) {
+  return new Promise((resolve, reject) => {
+    const onSeeked = () => { video.removeEventListener('seeked', onSeeked); resolve(); };
+    const onError = e => { video.removeEventListener('error', onError); reject(e); };
+    video.addEventListener('seeked', onSeeked, { once: true });
+    video.addEventListener('error', onError, { once: true });
+    video.currentTime = t;
+  });
+}
+
+async function extractLandmarks(video, fps, onProgress) {
+  const duration = video.duration;
+  const dt = 1 / fps;
+  const frames = [];
+  let detected = 0, missed = 0;
+
+  for (let t = 0; t < duration - 1e-3; t += dt) {
+    await seekTo(video, t);
+    const res = await sendFrame(video);
+    const lm = res && res.poseLandmarks ? res.poseLandmarks : null;
+    if (lm) detected++; else missed++;
+    frames.push({
+      t: Math.round(t * 1e6) / 1e6,
+      landmarks: lm,
+      worldLandmarks: res && res.poseWorldLandmarks ? res.poseWorldLandmarks : null,
+    });
+    if (onProgress && frames.length % 30 === 0) onProgress(frames.length, duration / dt);
+  }
+  return { frames, detected, missed };
+}
+
+// --------------------------------------------------------------------------
+// Run
+// --------------------------------------------------------------------------
+let lastResult = null;
+
+async function run(file, opts) {
+  opts = opts || {};
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  log(`loading ${file.name} (${(file.size / 1e6).toFixed(1)} MB)…`);
+  video.src = URL.createObjectURL(file);
+  await new Promise(r => video.addEventListener('loadedmetadata', r, { once: true }));
+  log(`  ${video.videoWidth}×${video.videoHeight}, ${video.duration.toFixed(2)}s`);
+
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  if (!pose) { log('initialising MediaPipe…'); await initPose(); }
+  log(`  modelComplexity=${MODEL_COMPLEXITY} (deviceMemory=${CAPS.deviceMemory}, cores=${CAPS.cores})`);
+
+  const fps = opts.fps || 30;
+  log(`extracting landmarks at ${fps} fps…`);
+  const t0 = performance.now();
+  const { frames, detected, missed } = await extractLandmarks(video, fps, (done, total) => {
+    log(`  ${done}/${Math.ceil(total)} frames`, 'stat');
+  });
+  const extractMs = performance.now() - t0;
+
+  log(`  ${detected} detected, ${missed} missed (${(100 * missed / frames.length).toFixed(1)}% miss)`,
+      missed > 0 ? 'warn' : null);
+
+  // Frames without a detection are dropped before replay: production simply
+  // returns early on those, so they contribute nothing to the measurement.
+  const usable = frames.filter(f => f.landmarks);
+  log(`replaying ${usable.length} frames through the production core…`);
+  const out = KinetiQReplay.replay(usable, { canvas, ctx, profile: opts.profile });
+
+  lastResult = {
+    source: {
+      file: file.name, bytes: file.size,
+      width: video.videoWidth, height: video.videoHeight,
+      duration_s: video.duration,
+      sample_fps: fps,
+    },
+    mediapipe: {
+      options: POSE_OPTIONS,
+      cdn: 'testingcf.jsdelivr.net/npm/@mediapipe/pose',
+      caps: CAPS,
+      frames_total: frames.length,
+      frames_detected: detected,
+      frames_missed: missed,
+      detection_rate: detected / frames.length,
+      extract_ms: Math.round(extractMs),
+    },
+    landmarks: usable.map(f => ({ t: f.t, lm: f.landmarks.map(p => [
+      Math.round(p.x * 1e5) / 1e5, Math.round(p.y * 1e5) / 1e5,
+      Math.round((p.z || 0) * 1e5) / 1e5, Math.round((p.visibility || 0) * 1e3) / 1e3,
+    ]) })),
+    series: out.series,
+    reps: out.reps,
+    repEvents: out.repEvents,
+    repCount: out.repCount,
+    meta: out.meta,
+    generated: new Date().toISOString(),
+  };
+
+  log(`\ndone: ${out.repCount} repetitions detected`, 'stat');
+  if (out.repEvents.length) {
+    for (const r of out.repEvents) {
+      log(`  rep ${r.rep}: knee ${r.knee.toFixed(1)}° trunk ${r.trunk.toFixed(1)}° ` +
+          `descent ${r.descentTime.toFixed(2)}s ascent ${r.ascentTime.toFixed(2)}s score ${r.score}`);
+    }
+  }
+  document.getElementById('download').disabled = false;
+  return lastResult;
+}
+
+// --------------------------------------------------------------------------
+// UI wiring + automation hooks
+// --------------------------------------------------------------------------
+let selectedFile = null;
+document.getElementById('file').addEventListener('change', e => {
+  selectedFile = e.target.files[0] || null;
+  document.getElementById('run').disabled = !selectedFile;
+  if (selectedFile) log(`selected: ${selectedFile.name}`);
+});
+
+document.getElementById('run').addEventListener('click', async () => {
+  document.getElementById('run').disabled = true;
+  try { await run(selectedFile, {}); }
+  catch (e) { log(`ERROR: ${e && e.message ? e.message : e}`, 'err'); }
+  finally { document.getElementById('run').disabled = false; }
+});
+
+document.getElementById('download').addEventListener('click', () => {
+  if (!lastResult) return;
+  const blob = new Blob([JSON.stringify(lastResult, null, 1)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (lastResult.source.file || 'result').replace(/\.[^.]+$/, '') + '_e1.json';
+  a.click();
+});
+
+/**
+ * Automation entry point. A headless driver fetches the video itself, so the
+ * file input is bypassed:
+ *     await window.E1.runURL('/data/videos/foo.mp4', { fps: 30 })
+ * and then reads window.E1.result.
+ */
+window.E1 = {
+  run,
+  get result() { return lastResult; },
+  async runURL(url, opts) {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`fetch ${url}: ${resp.status}`);
+    const blob = await resp.blob();
+    const name = url.split('/').pop();
+    return run(new File([blob], name, { type: blob.type || 'video/mp4' }), opts);
+  },
+  config: { POSE_OPTIONS, MODEL_COMPLEXITY, CAPS },
+};
+
+log(`core ${KinetiQCore.KINETIQ_PROVENANCE.engine_version} loaded ` +
+    `(src sha256 ${KinetiQCore.KINETIQ_PROVENANCE.source_sha256.slice(0, 12)}…)`);
+</script>
+</body>
+</html>

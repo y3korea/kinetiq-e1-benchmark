@@ -1,0 +1,122 @@
+{
+  "experiment": "BOTTOM_TH re-derivation for the aspect-corrected coordinate space",
+  "generated": "2026-08-21T15:33:25.044Z",
+  "engine_version": "ver7-D7.85",
+  "split": {
+    "unit": "recording",
+    "dev": [
+      "PM_008",
+      "PM_022",
+      "PM_029",
+      "PM_038",
+      "PM_043"
+    ],
+    "test": [
+      "PM_105",
+      "PM_113",
+      "PM_118",
+      "PM_126"
+    ]
+  },
+  "candidates": [
+    115,
+    120,
+    125,
+    130,
+    135,
+    140,
+    145
+  ],
+  "dev_baseline_as_is": {
+    "recall": 0.908256880733945,
+    "precision": 0.99,
+    "f1": 0.9473684210526316,
+    "matched": 99,
+    "fp": 1,
+    "ann": 109
+  },
+  "dev_sweep": [
+    {
+      "bottom": 115,
+      "recall": 0.8256880733944955,
+      "precision": 0.989010989010989,
+      "f1": 0.9000000000000001,
+      "matched": 90,
+      "fp": 1,
+      "ann": 109
+    },
+    {
+      "bottom": 120,
+      "recall": 0.8440366972477065,
+      "precision": 0.989247311827957,
+      "f1": 0.9108910891089109,
+      "matched": 92,
+      "fp": 1,
+      "ann": 109
+    },
+    {
+      "bottom": 125,
+      "recall": 0.8532110091743119,
+      "precision": 0.9893617021276596,
+      "f1": 0.916256157635468,
+      "matched": 93,
+      "fp": 1,
+      "ann": 109
+    },
+    {
+      "bottom": 130,
+      "recall": 0.8807339449541285,
+      "precision": 0.9896907216494846,
+      "f1": 0.9320388349514565,
+      "matched": 96,
+      "fp": 1,
+      "ann": 109
+    },
+    {
+      "bottom": 135,
+      "recall": 0.908256880733945,
+      "precision": 0.9801980198019802,
+      "f1": 0.9428571428571428,
+      "matched": 99,
+      "fp": 2,
+      "ann": 109
+    },
+    {
+      "bottom": 140,
+      "recall": 0.908256880733945,
+      "precision": 0.9801980198019802,
+      "f1": 0.9428571428571428,
+      "matched": 99,
+      "fp": 2,
+      "ann": 109
+    },
+    {
+      "bottom": 145,
+      "recall": 0.8990825688073395,
+      "precision": 0.9514563106796117,
+      "f1": 0.9245283018867926,
+      "matched": 98,
+      "fp": 5,
+      "ann": 109
+    }
+  ],
+  "chosen": 135,
+  "selection_rule": "highest F1 on dev; among values within 0.005 F1 of the best, the smallest, because a lower depth gate admits fewer shallow movements",
+  "test_as_is": {
+    "recall": 0.8902439024390244,
+    "precision": 0.9358974358974359,
+    "f1": 0.9125,
+    "matched": 73,
+    "fp": 5,
+    "ann": 82
+  },
+  "test_corrected": {
+    "recall": 0.8780487804878049,
+    "precision": 0.935064935064935,
+    "f1": 0.9056603773584906,
+    "matched": 72,
+    "fp": 5,
+    "ann": 82
+  },
+  "note": "BOTTOM_TH gates detection, not quality. Squat depth adequacy is judged separately by repScore() against the ACSM/NASM ranges in STANDARDS."
+}

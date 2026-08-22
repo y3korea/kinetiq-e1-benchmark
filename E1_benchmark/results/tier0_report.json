@@ -1,0 +1,298 @@
+{
+  "experiment": "E1 Tier 0 — measurement-chain verification vs analytic ground truth",
+  "generated": "2026-08-22T14:27:38.991Z",
+  "engine_version": "ver7-D7.85",
+  "source_sha256": "803f34844fc02e99a533ec1ce052fe57f59d98628a123459236f56d93332d934",
+  "scope_note": "Synthetic landmarks with exact ground truth. Isolates application angle math, EMA filter and repetition FSM. Contains NO evidence about human measurement accuracy.",
+  "results": {
+    "T0_1_static_accuracy": {
+      "n_poses": 30,
+      "per_joint": {
+        "knee": {
+          "mae_deg": 0,
+          "rmse_deg": 0,
+          "max_abs_deg": 0,
+          "bias_deg": 0
+        },
+        "hip": {
+          "mae_deg": 0,
+          "rmse_deg": 0,
+          "max_abs_deg": 0,
+          "bias_deg": 0
+        },
+        "trunk": {
+          "mae_deg": 0,
+          "rmse_deg": 0,
+          "max_abs_deg": 0,
+          "bias_deg": 0
+        },
+        "ankle": {
+          "mae_deg": 0,
+          "rmse_deg": 0,
+          "max_abs_deg": 0,
+          "bias_deg": 0
+        }
+      },
+      "csv": "t0_1_static_accuracy.csv",
+      "interpretation": "Static-pose agreement is exact to floating-point precision, confirming calcAngle/calcTrunk implement their intended geometric definitions and that the visible-side selection picks the intended limb."
+    },
+    "T0_2_ema_depth_bias": {
+      "csv": "t0_2_ema_depth_bias.csv",
+      "rows": [
+        {
+          "descent_s": 0.5,
+          "fps": 30,
+          "gt_min_knee": 85,
+          "app_min_knee": 85.394,
+          "depth_underreport_deg": 0.394,
+          "rep_reported_knee": 85.428,
+          "rep_underreport_deg": 0.428,
+          "peak_angular_velocity_deg_s": 282.743
+        },
+        {
+          "descent_s": 0.75,
+          "fps": 30,
+          "gt_min_knee": 85,
+          "app_min_knee": 85.198,
+          "depth_underreport_deg": 0.198,
+          "rep_reported_knee": 85.216,
+          "rep_underreport_deg": 0.216,
+          "peak_angular_velocity_deg_s": 188.496
+        },
+        {
+          "descent_s": 1,
+          "fps": 30,
+          "gt_min_knee": 85,
+          "app_min_knee": 85.121,
+          "depth_underreport_deg": 0.121,
+          "rep_reported_knee": 85.126,
+          "rep_underreport_deg": 0.126,
+          "peak_angular_velocity_deg_s": 141.372
+        },
+        {
+          "descent_s": 1.5,
+          "fps": 30,
+          "gt_min_knee": 85,
+          "app_min_knee": 85.055,
+          "depth_underreport_deg": 0.055,
+          "rep_reported_knee": 85.058,
+          "rep_underreport_deg": 0.058,
+          "peak_angular_velocity_deg_s": 94.248
+        },
+        {
+          "descent_s": 2,
+          "fps": 30,
+          "gt_min_knee": 85,
+          "app_min_knee": 85.032,
+          "depth_underreport_deg": 0.032,
+          "rep_reported_knee": 85.032,
+          "rep_underreport_deg": 0.032,
+          "peak_angular_velocity_deg_s": 70.686
+        },
+        {
+          "descent_s": 3,
+          "fps": 30,
+          "gt_min_knee": 85,
+          "app_min_knee": 85.014,
+          "depth_underreport_deg": 0.014,
+          "rep_reported_knee": 85.015,
+          "rep_underreport_deg": 0.015,
+          "peak_angular_velocity_deg_s": 47.124
+        },
+        {
+          "descent_s": 4,
+          "fps": 30,
+          "gt_min_knee": 85,
+          "app_min_knee": 85.008,
+          "depth_underreport_deg": 0.008,
+          "rep_reported_knee": 85.008,
+          "rep_underreport_deg": 0.008,
+          "peak_angular_velocity_deg_s": 35.343
+        }
+      ],
+      "max_underreport_deg": 0.428,
+      "interpretation": "The EMA filter systematically under-reports squat depth (reported minimum knee angle exceeds the true minimum), with the bias growing as tempo increases. The magnitude is small — at most 0.428 deg over a 0.5-4 s descent range — because the 0.3 s bottom hold in these trajectories gives the filter time to settle at the turnaround. Movements without a bottom hold, or sampled at low frame rates (see T0.5), incur substantially more. Reported here as a quantified systematic error term rather than a defect; a zero-phase (forward-backward) filter applied to stored per-repetition minima would remove it."
+    },
+    "T0_3_rep_counting": {
+      "bottom_threshold_deg": 135,
+      "conditions": 20,
+      "exact_conditions": 20,
+      "mae_reps": 0,
+      "max_abs_error_reps": 0,
+      "csv": "t0_3_rep_counting.csv",
+      "interpretation": "Repetition counting is exact for every repetition that crosses the FSM depth threshold (135°), and correctly refuses to count partial repetitions above it. Depth-gated counting is a deliberate design choice; it must be stated when comparing against human counters, who typically count attempts."
+    },
+    "T0_4_tempo_validity": {
+      "csv": "t0_4_tempo_validity.csv",
+      "descent_ratio_mean": 0.939,
+      "descent_ratio_sd": 0.124,
+      "mean_score_penalty_points": -0.13,
+      "max_score_penalty_points": 1,
+      "defect": false,
+      "score_discrimination_lost": false,
+      "downstream_consumers": [
+        "index.html:1077,3328-3329  on-screen tempo readout (운동 속도 하강/상승)",
+        "index.html:3394            repScore() tempo penalty term (10% + 5% weight)",
+        "index.html:3422            per-rep tempo table colour coding (timing-good/warn/bad)",
+        "index.html:5059,7400       research CSV columns descent_s/ascent_s, descent_sec/ascent_sec",
+        "index.html:4249            LLM coaching context string (AI coach tempo advice)",
+        "index.html:3865,3974,4230,4422  PDF report tempo sections"
+      ],
+      "interpretation": "PASS (fixed in ver7-D7.66). detectPhase() now times the eccentric phase from departure from standing to the true turnaround, rather than the traversal of a mid-range angular window. Reported duration is 94% of true (sd 0.124), no repetition is pinned to the 0.3 s clamp floor, and repScore() again discriminates across the 1-4 s tempo range. Before the fix the figure was 24% and every tempo scored identically. The concentric phase is still measured to the repetition-completion threshold rather than the peak, so ascent duration remains systematically ~25% short — a documented residual limitation."
+    },
+    "T0_5_frame_rate": {
+      "csv": "t0_5_frame_rate.csv",
+      "rows": [
+        {
+          "effective_fps": 60,
+          "frames": 1825,
+          "detected_reps": 8,
+          "expected_reps": 8,
+          "rep_error": 0,
+          "reported_min_knee": 85.001,
+          "depth_underreport_deg": 0.001,
+          "mean_descent_s": 1.602
+        },
+        {
+          "effective_fps": 30,
+          "frames": 913,
+          "detected_reps": 8,
+          "expected_reps": 8,
+          "rep_error": 0,
+          "reported_min_knee": 85.056,
+          "depth_underreport_deg": 0.056,
+          "mean_descent_s": 1.6
+        },
+        {
+          "effective_fps": 20,
+          "frames": 609,
+          "detected_reps": 8,
+          "expected_reps": 8,
+          "rep_error": 0,
+          "reported_min_knee": 85.353,
+          "depth_underreport_deg": 0.353,
+          "mean_descent_s": 1.625
+        },
+        {
+          "effective_fps": 15,
+          "frames": 457,
+          "detected_reps": 8,
+          "expected_reps": 8,
+          "rep_error": 0,
+          "reported_min_knee": 85.913,
+          "depth_underreport_deg": 0.913,
+          "mean_descent_s": 1.658
+        },
+        {
+          "effective_fps": 12,
+          "frames": 365,
+          "detected_reps": 8,
+          "expected_reps": 8,
+          "rep_error": 0,
+          "reported_min_knee": 86.769,
+          "depth_underreport_deg": 1.769,
+          "mean_descent_s": 1.677
+        },
+        {
+          "effective_fps": 10,
+          "frames": 305,
+          "detected_reps": 8,
+          "expected_reps": 8,
+          "rep_error": 0,
+          "reported_min_knee": 87.801,
+          "depth_underreport_deg": 2.801,
+          "mean_descent_s": 1.713
+        },
+        {
+          "effective_fps": 6,
+          "frames": 183,
+          "detected_reps": 8,
+          "expected_reps": 8,
+          "rep_error": 0,
+          "reported_min_knee": 93.509,
+          "depth_underreport_deg": 8.509,
+          "mean_descent_s": 1.688
+        }
+      ],
+      "interpretation": "Characterises degradation on low-end devices, where the production pipeline adaptively lowers model complexity and effective frame rate. Repetition counting is robust down to low rates; reported depth degrades gradually because coarse sampling misses the turnaround and compounds the EMA lag of T0.2."
+    },
+    "T0_6_noise_robustness": {
+      "csv": "t0_6_noise_robustness.csv",
+      "rows": [
+        {
+          "landmark_noise_sd_x1000": 0,
+          "rep_count_mae": 0,
+          "knee_mae_deg": 3.509,
+          "knee_sd_deg": 4.592,
+          "hip_mae_deg": 4.033,
+          "hip_sd_deg": 5.278,
+          "trunk_mae_deg": 1.331,
+          "trunk_sd_deg": 1.742,
+          "ankle_mae_deg": 0.605,
+          "ankle_sd_deg": 0.792
+        },
+        {
+          "landmark_noise_sd_x1000": 1,
+          "rep_count_mae": 0,
+          "knee_mae_deg": 3.53,
+          "knee_sd_deg": 4.588,
+          "hip_mae_deg": 4.054,
+          "hip_sd_deg": 5.27,
+          "trunk_mae_deg": 1.347,
+          "trunk_sd_deg": 1.739,
+          "ankle_mae_deg": 0.786,
+          "ankle_sd_deg": 0.977
+        },
+        {
+          "landmark_noise_sd_x1000": 2,
+          "rep_count_mae": 0,
+          "knee_mae_deg": 3.57,
+          "knee_sd_deg": 4.596,
+          "hip_mae_deg": 4.087,
+          "hip_sd_deg": 5.27,
+          "trunk_mae_deg": 1.369,
+          "trunk_sd_deg": 1.745,
+          "ankle_mae_deg": 1.142,
+          "ankle_sd_deg": 1.437
+        },
+        {
+          "landmark_noise_sd_x1000": 5,
+          "rep_count_mae": 0,
+          "knee_mae_deg": 3.718,
+          "knee_sd_deg": 4.689,
+          "hip_mae_deg": 4.21,
+          "hip_sd_deg": 5.318,
+          "trunk_mae_deg": 1.451,
+          "trunk_sd_deg": 1.804,
+          "ankle_mae_deg": 2.518,
+          "ankle_sd_deg": 3.195
+        },
+        {
+          "landmark_noise_sd_x1000": 10,
+          "rep_count_mae": 0,
+          "knee_mae_deg": 4.114,
+          "knee_sd_deg": 5.047,
+          "hip_mae_deg": 4.494,
+          "hip_sd_deg": 5.537,
+          "trunk_mae_deg": 1.687,
+          "trunk_sd_deg": 2.041,
+          "ankle_mae_deg": 5.09,
+          "ankle_sd_deg": 6.499
+        },
+        {
+          "landmark_noise_sd_x1000": 20,
+          "rep_count_mae": 0,
+          "knee_mae_deg": 5.822,
+          "knee_sd_deg": 6.594,
+          "hip_mae_deg": 5.721,
+          "hip_sd_deg": 6.638,
+          "trunk_mae_deg": 2.576,
+          "trunk_sd_deg": 2.952,
+          "ankle_mae_deg": 10.398,
+          "ankle_sd_deg": 13.225
+        }
+      ],
+      "interpretation": "Sensitivity analysis with i.i.d. gaussian landmark jitter. Frame-wise error includes the EMA tracking lag of T0.2, so it is an upper bound on the static error at a given noise level. Real pose-estimation error is spatially and temporally correlated, so these figures do not substitute for Tier 1/2."
+    }
+  }
+}

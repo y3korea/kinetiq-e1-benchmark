@@ -1,0 +1,99 @@
+{
+  "experiment": "Tier 2 end-to-end, production code replayed over the persisted landmark corpus",
+  "generated": "2026-08-22T14:27:39.793Z",
+  "engine_version": "ver7-D7.85",
+  "source_sha256": "803f34844fc02e99a533ec1ce052fe57f59d98628a123459236f56d93332d934",
+  "frame": {
+    "width": 1080,
+    "height": 1920
+  },
+  "counting": {
+    "recall": 0.895,
+    "precision": 0.961,
+    "matched": 171,
+    "fp": 7,
+    "annotated": 191
+  },
+  "knee": {
+    "n": 171,
+    "mae": 15.16,
+    "bias": -8.46,
+    "rmse": 23.8,
+    "p95": 56.04
+  },
+  "hip": {
+    "n": 171,
+    "mae": 17.4,
+    "bias": -14.97,
+    "rmse": 26.17,
+    "p95": 65.75
+  },
+  "trunk": {
+    "n": 171,
+    "mae": 6.49,
+    "bias": -1.93,
+    "rmse": 7.73,
+    "p95": 13.46
+  },
+  "view": {
+    "sagittal": {
+      "n": 97,
+      "mae": 5.63,
+      "bias": 4.44,
+      "rmse": 6.35,
+      "p95": 10.06
+    },
+    "oblique": {
+      "n": 74,
+      "mae": 27.66,
+      "bias": -25.37,
+      "rmse": 35.45,
+      "p95": 67.1
+    }
+  },
+  "score_validity": {
+    "auc": 0.71,
+    "correct_mean": 84.25,
+    "incorrect_mean": 77.47
+  },
+  "limb_selection": {
+    "PM_008": {
+      "side": "left",
+      "stability": 0.9996147177807744
+    },
+    "PM_022": {
+      "side": "left",
+      "stability": 0.9350743561842583
+    },
+    "PM_029": {
+      "side": "left",
+      "stability": 0.9854368932038835
+    },
+    "PM_038": {
+      "side": "left",
+      "stability": 0.9975747776879548
+    },
+    "PM_043": {
+      "side": "left",
+      "stability": 0.9971131639722863
+    },
+    "PM_105": {
+      "side": "left",
+      "stability": 1
+    },
+    "PM_113": {
+      "side": "left",
+      "stability": 1
+    },
+    "PM_118": {
+      "side": "left",
+      "stability": 1
+    },
+    "PM_126": {
+      "side": "left",
+      "stability": 1
+    }
+  },
+  "limb_note": "recovered exactly from landmark visibilities, the same rule the app uses",
+  "scope_note": "Benchmark against mocap-derived reference angles on one dataset and one camera geometry. Not a clinical validation study."
+}
