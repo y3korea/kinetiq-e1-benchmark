@@ -1,3 +1,12 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Figure outputs are derived: `python3 figures/make_figure*.py` rebuilds them
+# byte-for-byte from E1_benchmark/results/. Keeping the generators tracked and
+# the rasters untracked is what makes that claim checkable.
+figures/*.png
+figures/*.pdf
+figures/*.svg
+figures/submission_300dpi/
+figures/submission_600dpi/

@@ -199,6 +199,36 @@ const provenance = {
   source_bytes: srcStat.size,
   source_mtime: srcStat.mtime.toISOString(),
   engine_version: engineVer,
+  node_version: process.version,
+  // The measurement chain below is hashed line by line, but until D7.90 the
+  // perception model in front of it was loaded from an unversioned CDN path, so
+  // nothing here recorded which pose build produced a result. Derived from
+  // pose_assets.json rather than hard-coded, so the record cannot drift from
+  // what verify_pose_assets.cjs actually checked. Absent in a clean clone that
+  // has not run that script yet -- that must not be fatal.
+  pose_runtime: (() => {
+    try {
+      const m = JSON.parse(fs.readFileSync(path.join(__dirname, 'pose_assets.json'), 'utf8'));
+      return {
+        package: m.package,
+        version: m.version,
+        cdn_host: m.cdn_host,
+        model_selection: m.model_selection,
+        benchmark_run_complexity: m.benchmark_run_complexity,
+        benchmark_run_model: m.benchmark_run_model,
+        assets: m.assets.map(a => ({ file: a.file, bytes: a.bytes, sha256: a.sha256 })),
+        companion_packages: (m.companion_packages || []).map(c => ({
+          package: c.package,
+          version: c.version,
+          assets: c.assets.map(a => ({ file: a.file, bytes: a.bytes, sha256: a.sha256 })),
+        })),
+        verification: m.verification,
+        note: m.latest_note,
+      };
+    } catch (_) {
+      return 'absent — run node verify_pose_assets.cjs';
+    }
+  })(),
   extracted: extracted.map(({ text, ...meta }) => meta),
 };
 

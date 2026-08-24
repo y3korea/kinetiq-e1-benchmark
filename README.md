@@ -7,7 +7,7 @@ Harness, extracted measurement core, per-repetition outputs, and figure scripts 
 
 ## What this is
 
-Published evaluations of camera-based movement assessment usually test a **research pipeline assembled for the study**, not the code users actually run. This harness closes that gap: `extract_core.cjs` slices the measurement functions out of the deployed single-page application **by line range**, records a SHA-256 for each, and emits a module that the harness executes **unmodified**. The artifact evaluated is byte-identical to the artifact deployed, and `harness/provenance.json` binds every result to one engine version.
+Published evaluations of camera-based movement assessment usually test a **research pipeline assembled for the study**, not the code users actually run. This harness closes that gap: `extract_core.cjs` slices the measurement functions out of the deployed single-page application **by line range**, records a SHA-256 for each, and emits a module that the harness executes **unmodified**. The artifact evaluated is byte-identical to the artifact deployed, and `harness/provenance.json` binds every result to one engine version **and to one pose-estimator build** (`@mediapipe/pose@0.5.1675469404`, per-asset SHA-256 in `harness/pose_assets.json`).
 
 Three reference tiers drive it:
 
@@ -68,12 +68,15 @@ E1_benchmark/
 │   ├── uiprmd_run.cjs            external-validity replay, subject-level bootstrap, Bland–Altman
 │   ├── yaw_sweep.py              virtual-camera projection sweep (yaw / pitch)
 │   ├── tier2_*.{cjs,py,html}     end-to-end video → MediaPipe → chain, statistics
+│   ├── tier2_reference_3d.py     rescore Tier 2 against a 3-D reference (Table V like-for-like)
+│   ├── verify_pose_assets.cjs    pin check: pinned vs unversioned CDN bytes → pose_assets.json
+│   ├── pose_assets.json          [generated] pose-estimator version + per-asset SHA-256
 │   └── ...
 ├── analysis/gt_adapters/         dataset adapters (REHAB24-6, UI-PRMD)
 ├── data/gt/FETCH.md              how to obtain the datasets (+ SHA-256); no dataset file is shipped
 ├── results/                      per-repetition CSVs and report JSONs (every number in the paper)
 └── device_bench/                 on-device benchmark protocol + analyser
-figures/                          figure-generation scripts (consume results/*.json)
+figures/                          figure-generation scripts + ieee_style.py (consume results/*.json)
 assets/                           README images (rendered from the shipped UI, no participant data)
 ```
 
@@ -91,9 +94,43 @@ python3 uiprmd_sweep.py      # UI-PRMD → landmark streams
 node uiprmd_run.cjs          # T1.5 external validity (subject-level bootstrap, B=10,000, seed 42)
 python3 yaw_sweep.py         # viewing-angle sweep
 node tier2_stats.cjs         # T2 recording-level bootstrap, Bland–Altman, SRD
+node verify_pose_assets.cjs  # pose-estimator pin: pinned vs unversioned bytes (~100 MB, network)
+python3 tier2_reference_3d.py   # Tier 2 rescored against a 3-D reference (Table V)
 ```
 
 Every script writes into `results/`; figures are regenerated from those files by `figures/make_figure*.py`. Results are deterministic (fixed bootstrap seeds, video-time clock), so a re-run reproduces the committed outputs byte-for-byte.
+
+### The pose estimator is pinned too
+
+The measurement chain is sliced and hashed, but until `ver7-D7.90` the perception
+model in front of it was loaded from an unversioned CDN path, so nothing recorded
+which pose build produced a number. Application and harness now request
+`@mediapipe/pose@0.5.1675469404` at **every** script and asset load site — pinning
+the `<script>` tag alone would leave ~36 MB of model and WASM assets floating,
+because those resolve through the application's own `locateFile` callback.
+
+The benchmark itself ran the unversioned URL. That is recoverable rather than lost:
+`@mediapipe/pose` has published nothing since `0.5.1675469404` (2023-02-04) and the
+runs are dated 2026-08-21 to 2026-08-24, so the unversioned path could only have
+resolved to that build. `verify_pose_assets.cjs` downloads every runtime asset from
+both paths and asserts the bytes match — 12 pose assets plus 2 companions, all
+identical — which is what makes the pin behaviour-preserving rather than a silent
+change of engine.
+
+`results/` was **not** retro-fitted with a version field. Editing published result
+files to look better provenanced is the failure mode this benchmark exists to catch.
+
+### Table V reads two ways
+
+The headline sagittal knee MAE (5.63°) is measured against the dataset's own
+published 2-D projection into camera 18 — the plane the pose estimator actually
+sees, carrying no projection assumption of ours. Some comparators in the paper's
+Table V use a 3-D reference, which additionally charges the monocular projection
+term. `tier2_reference_3d.py` rescores the same application outputs against the 3-D
+anatomical knee angle so the comparison can be read either way: **8.90°**, of which
+**+4.46°** is projection. It reproduces the six published figures
+(5.63 / +4.44 / n=97 / 15.16 / −8.46 / n=171) before computing anything derived, and
+exits non-zero if it cannot.
 
 `E1_benchmark/README.md` documents the full method, the eight defects the benchmark exposed, the corrections, and the **claim-hygiene rules** that govern how these numbers may be described — in particular that Tier 2 is a benchmark against mocap-derived references, **not** a clinical validation study.
 

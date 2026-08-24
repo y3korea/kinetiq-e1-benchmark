@@ -21,7 +21,7 @@
   see CHANGELOG D7.64/D7.65, where switching hosts caused a regression.
 -->
 
-<script src="https://testingcf.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+<script src="https://testingcf.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/pose.js" crossorigin="anonymous"></script>
 
 <style>
   body { font: 14px/1.5 -apple-system, system-ui, sans-serif; margin: 24px; background: #111; color: #eee; }
@@ -95,7 +95,7 @@ let pose = null;
 let poseReady = null;
 
 function initPose() {
-  pose = new Pose({ locateFile: f => `https://testingcf.jsdelivr.net/npm/@mediapipe/pose/${f}` });
+  pose = new Pose({ locateFile: f => `https://testingcf.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${f}` });
   pose.setOptions(POSE_OPTIONS);
   // Landmarks are collected here and replayed through the core afterwards, so
   // that pose estimation and the measurement chain stay separable in analysis.
@@ -198,7 +198,7 @@ async function run(file, opts) {
     },
     mediapipe: {
       options: POSE_OPTIONS,
-      cdn: 'testingcf.jsdelivr.net/npm/@mediapipe/pose',
+      cdn: 'testingcf.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404',
       caps: CAPS,
       frames_total: frames.length,
       frames_detected: detected,

@@ -20,7 +20,7 @@
   D7.64/D7.65: switching hosts broke pose loading entirely).
 -->
 
-<script src="https://testingcf.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+<script src="https://testingcf.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/pose.js" crossorigin="anonymous"></script>
 <style>
  body{font:13px/1.5 ui-monospace,Menlo,monospace;background:#0d0d0d;color:#ddd;margin:20px}
  #log{white-space:pre;background:#000;border:1px solid #333;padding:10px;height:340px;overflow:auto}
@@ -39,7 +39,13 @@
 const logEl=document.getElementById('log');
 function log(m,c){logEl.innerHTML+='\n'+(c?`<span class="${c}">${m}</span>`:m);logEl.scrollTop=logEl.scrollHeight;}
 
-// Production-identical configuration (index.html:103, 2960)
+// Production-identical configuration (index.html:103, 2960), with one
+// documented divergence: production defaults deviceMemory to 4 when the browser
+// does not expose it (index.html:90), this harness to 8. It cannot affect the
+// published run -- the recorded MODEL_COMPLEXITY was 2 for all nine recordings
+// (results/tier2_report.json) -- but on a browser without navigator.deviceMemory
+// (Safari, Firefox) the two could select different models. Do not "align" this
+// without re-running Tier 2: the recorded run is what the paper reports.
 const CAPS={deviceMemory:navigator.deviceMemory||8,cores:navigator.hardwareConcurrency||8};
 const MODEL_COMPLEXITY=(CAPS.deviceMemory>=4&&CAPS.cores>=4)?2:(CAPS.deviceMemory>=2&&CAPS.cores>=2)?1:0;
 const POSE_OPTIONS={modelComplexity:MODEL_COMPLEXITY,smoothLandmarks:true,enableSegmentation:false,
@@ -47,7 +53,7 @@ const POSE_OPTIONS={modelComplexity:MODEL_COMPLEXITY,smoothLandmarks:true,enable
 
 let pose=null,pending=null;
 async function initPose(){
-  pose=new Pose({locateFile:f=>`https://testingcf.jsdelivr.net/npm/@mediapipe/pose/${f}`});
+  pose=new Pose({locateFile:f=>`https://testingcf.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${f}`});
   pose.setOptions(POSE_OPTIONS);
   pose.onResults(r=>{const p=pending;pending=null;if(p)p(r);});
   await pose.initialize();

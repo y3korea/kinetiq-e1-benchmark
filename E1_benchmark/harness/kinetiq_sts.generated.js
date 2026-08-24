@@ -1,5 +1,5 @@
 // GENERATED — verbatim extraction from squat-app/index.html (ver7-D7.85)
-// Do not edit. Regenerate with: node extract_sts.cjs
+// Do not edit. Regenerate with: node extract_sts.cjs --src squat-app/versions/ver7-D7.85/index.html
 //
 // The sit-to-stand chain, lifted unmodified so the benchmark exercises the shipping
 // code rather than a reimplementation of it.

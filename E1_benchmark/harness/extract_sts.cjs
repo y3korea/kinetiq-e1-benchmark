@@ -10,8 +10,23 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const SRC = path.resolve(__dirname, '..', '..', 'squat-app', 'index.html');
-const OUT = path.join(__dirname, 'kinetiq_sts.generated.js');
+// Mirrors extract_core.cjs: --src lets the benchmark re-extract from a pinned
+// snapshot under squat-app/versions/ rather than silently re-binding to the live
+// build, which would move every published hash.
+const args = process.argv.slice(2);
+function arg(flag, dflt) {
+  const i = args.indexOf(flag);
+  return i >= 0 && args[i + 1] ? args[i + 1] : dflt;
+}
+
+const SRC = path.resolve(arg('--src', path.join(__dirname, '..', '..', 'squat-app', 'index.html')));
+const OUT = path.resolve(arg('--out', path.join(__dirname, 'kinetiq_sts.generated.js')));
+
+// Repo-relative label for the banner; blank when --src was not used or points
+// outside the repo, so the generated file never carries a machine-specific path.
+const REPO = path.join(__dirname, '..', '..');
+const rel = path.relative(REPO, SRC);
+const SRC_LABEL = (args.includes('--src') && !rel.startsWith('..')) ? rel : '';
 
 const html = fs.readFileSync(SRC, 'utf8');
 const lines = html.split('\n');
@@ -35,7 +50,7 @@ const defs = {
 };
 
 const banner = `// GENERATED — verbatim extraction from squat-app/index.html (${VER})
-// Do not edit. Regenerate with: node extract_sts.cjs
+// Do not edit. Regenerate with: node extract_sts.cjs${SRC_LABEL ? ' --src ' + SRC_LABEL : ''}
 //
 // The sit-to-stand chain, lifted unmodified so the benchmark exercises the shipping
 // code rather than a reimplementation of it.

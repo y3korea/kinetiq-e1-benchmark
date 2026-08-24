@@ -57,7 +57,10 @@ function auc(pos, neg) {
   return w / (pos.length * neg.length);
 }
 
-// tier2_prod_verify 와 동일한 limb 선택 (가시성 규칙)
+// limb 선택 — tier2_prod_verify 와 **규칙이 다르다**. 여기는 세 랜드마크(hip/knee/ankle)
+// 가시성의 전체 평균을 비교하고, tier2_prod_verify 는 네 랜드마크에 대한 프레임 단위
+// 다수결을 쓴다. 아홉 녹화 모두 양쪽이 'left' 를 반환해 발표된 수치에는 영향이 없으나,
+// 동일하다고 적어 두면 다음 사람이 한쪽만 고치게 된다.
 function chosenSide(c) {
   let L = 0, R = 0, n = 0;
   for (const r of c.landmarks) { if (!r) continue;

@@ -4,7 +4,7 @@
 
 > **IEEE J-BHI 그림 규약 (2026-08-22 도입)** — 모든 그림은 `ieee_style.py` 를 따른다: Times New Roman 8pt(본문과 동일), 축선 0.6pt·눈금 안쪽, 위/오른쪽 축 제거, 그림 안 제목 없음(캡션이 담당), 패널 태그 `(a)`–`(d)` 는 축 바깥, 범례 테두리 없음, **흑백 인쇄 가능**(계열마다 선 모양·마커가 다르고 색은 무채색), PDF 폰트 Type 42 임베드. 그림은 **배치 크기 그대로 제작**한다 — 폭 7.16 in(양단) = 687 px @96 dpi, 원고 빌드가 1:1 로 넣으므로 라벨이 8pt 로 유지된다. 파이프라인 SVG 는 viewBox 폭 687 에 font-size 10.7 px(=8pt)·9.3 px(=7pt).
 >
-> 재출력: `python3 make_figure3_viewangle.py` (4·5 도 동일) / SVG 는 `@page{size:687px 108px}` 래퍼로 Chrome 헤드리스 `--window-size=687,108 --force-device-scale-factor=3` → PNG 2061×324 + PDF, `submission_300dpi/` 에 복사.
+> 재출력: `python3 make_figure3_viewangle.py` (4·5 도 동일). Fig. 1 파이프라인 도식은 2026-08-23 부터 `python3 make_figure2_pipeline.py` 가 벡터 마스터 `figure2_pipeline.pdf` 를 300/600 dpi 로 래스터화한다 — 예전의 Chrome 헤드리스 명령은 문서 안 산문으로만 존재해 실행으로 재현할 수 없었다.
 
 생성: 2026-05-31 · 기준 코드 버전: ver7-D7.65 · 출처: TECH_SPEC.md §3.2/§3.3, CES_BRIEF.md §3
 
@@ -110,10 +110,46 @@ Tier 2(영상 → MediaPipe → 체인) end-to-end 수치. SRD 는 검사–재�
 
 ### 캡션
 
-**그림 5.** 두 독립 모캡 코호트에서 배포 체인과 3D 해부학적 최저 무릎각의 Bland–Altman 일치도 (랜드마크 주입, 인지 우회). 좌: REHAB24-6 (OptiTrack; bias +1.9°, LoA [−3.9, +7.7]°). 우: UI-PRMD 딥스쿼트 (Vicon; bias +2.3°, LoA [−6.0, +10.5]°), 피험자별 색. 피험자마다 다른 수직 오프셋은 측정 체인이 아니라 단안 투영 항이다.
+**그림 5.** 두 독립 모캡 코호트에서 배포 체인과 3D 해부학적 최저 무릎각의 Bland–Altman 일치도 (랜드마크 주입, 인지 우회). 좌: REHAB24-6 (OptiTrack; bias +1.9°, LoA [−3.9, +7.7]°). 우: UI-PRMD 딥스쿼트 (Vicon; bias +2.3°, LoA [−6.0, +10.5]°), 피험자마다 다른 마커. 피험자마다 다른 수직 오프셋은 측정 체인이 아니라 단안 투영 항이다.
 
-*Fig. 5.* Bland–Altman agreement of the deployed chain against the 3-D anatomical minimum knee angle on two independent motion-capture cohorts, landmarks injected at the interface (perception bypassed). Left: REHAB24-6 (OptiTrack; bias +1.9°, LoA [−3.9, +7.7]°). Right: UI-PRMD deep squat (Vicon; bias +2.3°, LoA [−6.0, +10.5]°), coloured by subject; the subject-specific vertical offsets are the monocular projection term, not the measurement chain.
+*Fig. 5.* Bland–Altman agreement of the deployed chain against the 3-D anatomical minimum knee angle on two independent motion-capture cohorts, landmarks injected at the interface (perception bypassed). Left: REHAB24-6 (OptiTrack; bias +1.9°, LoA [−3.9, +7.7]°). Right: UI-PRMD deep squat (Vicon; bias +2.3°, LoA [−6.0, +10.5]°), one marker per subject; the subject-specific vertical offsets are the monocular projection term, not the measurement chain.
 
 ### 범위 (반드시 함께 기술할 것)
 
 두 패널 모두 **T1.5** 다 — MediaPipe 인지 오차가 포함되지 않는다. UI-PRMD 는 RGB 영상을 공개하지 않으므로 이 코호트에서는 end-to-end 측정이 원리적으로 불가능하다. 기준이 3D 해부학각이므로 각 패널은 단안 투영 하한(REHAB 중앙 0.22°, UI-PRMD 0.66°)을 포함한다. 두 패널의 투영 코드는 다르다 — 좌: E1 T1.5 내보내기(`tier15_export.py`, 등방 정규화), 우: `yaw_sweep` 투영(yaw 0°, 1280×960). 스윕이 yaw 0° 에서 T1.5 를 0.01° 안에서 재현하므로(무릎 MAE 2.41° vs 2.42°) 비교가 성립한다. 200 파일 중 2개는 참값 궤적만으로 정한 규칙(R1/R2, `E1_benchmark/README.md` §14.1)으로 배제됐다. 근거 수치: `E1_benchmark/results/uiprmd_report.json`.
+
+---
+
+## 2026-08-23 — 라벨 겹침 정리 (가독성)
+
+제출본 검토에서 **글자가 선·마커에 얹혀 읽히지 않는 지점**이 확인돼 세 그림을 손봤다. 데이터·수치는 무변경, 라벨 배치와 표현만 바뀌었다.
+
+**공통**: `ieee_style.py` 에 `HALO`(흰 배경 상자) 추가. 저널 그림의 관례대로 라벨을 설명 대상에서 떼어놓지 않고, 대신 글자 뒤에 흰 여백을 깔아 가독성을 확보한다.
+
+| 그림 | 문제 | 조치 |
+|---|---|---|
+| Fig. 2 (viewangle) | (b) "chance" 가 점선에 얹힘 · (a) "monocular floor" · (c) "camera low/high" 가 곡선/선과 충돌 | 전부 `bbox=S.HALO` + 위치 미세 조정 |
+| Fig. 2 (c) | "alignment metric flat…" 지시선이 **Knee·Hip 곡선을 가로지름** | 라벨을 곡선 아래 빈 구간(우하단)으로 옮기고 문구를 "alignment metric is blind to pitch" 로 축약해 헤일로 상자가 곡선을 가리지 않게 함. 지시선은 정렬지표 선까지 짧은 수직 화살표 |
+| Fig. 3 (Bland–Altman) | "bias +4.4°" · "bias −25.4°" 를 bias 실선이 관통 | 헤일로 + 2.5pt 올림. 통계 블록도 헤일로 |
+| Fig. 4 (external validity) | "bias +1.9/+2.3°" 를 실선·마커가 관통 · **"SRD 8.2°/11.7°" 를 LoA 점선이 관통** · 통계 블록이 마커와 겹침 | 전부 헤일로 + `linespacing=1.35`. subject-10 주석도 헤일로 |
+
+검증: 300 dpi 렌더를 확대해 육안 확인. 세 스크립트 모두 **2회 연속 실행 시 PNG 해시 동일**(결정적). 원고 재빌드 후 **8쪽 유지**.
+
+---
+
+## 2026-08-23 — 노트북 재현 체인 (원고 그림 4점)
+
+원고에 실리는 그림은 **`KinetiQ_JBHI_analysis.ipynb` §8 한 셀에서 전부 다시 만들어지고, 만든 결과가 원고에 박힌 파일과 같은지 그 자리에서 대조된다**. 셀은 네 스크립트를 차례로 실행한 뒤 실행 전후 SHA-256 을 비교해 `동일`/`★변경`, `upload/` 사본에 대해 `최신`/`★갱신 필요` 를 표로 찍고 `output/MANUSCRIPT_FIGURES.json` 에 해시를 남긴다.
+
+이 체인을 세우면서 고친 것 세 가지.
+
+| 문제 | 왜 문제인가 | 조치 |
+|---|---|---|
+| Fig. 1 을 만드는 명령이 문서 안 산문으로만 존재 | 그림 한 장이 아무것도 실행해서 재현할 수 없었다 | `make_figure2_pipeline.py` 신설 — `pdftoppm` 으로 벡터 마스터를 300/600 dpi 래스터화. 기존 커밋본과 **픽셀 동일** 확인 |
+| 그림 스크립트가 살아 있는 `E1_benchmark/results/` 를 직접 읽음 | 노트북이 해시 검증한 입력과 다른 파일로 그림이 만들어질 수 있었다 | `IEEE_JBHI/input/`(고정 사본) 을 먼저 보고, 없을 때만 라이브로 폴백 |
+| **노트북 안에서 실행하면 CLI 와 다른 바이트가 나옴** | 같은 스크립트가 실행 위치에 따라 다른 그림을 냈다 — 재현성 주장이 성립하지 않는다 | 원인은 노트북이 먼저 설정한 rcParams 중 `ieee_style.RC` 가 이름 대지 않은 항목이 그대로 새어 든 것. `ieee_style.apply()` 가 백엔드만 보존한 채 `rcdefaults()` 로 초기화한 뒤 RC 를 적용하도록 수정 |
+
+결정성 확인: 세 데이터 그림은 CLI 3회 연속 실행에서 PNG·PDF·SVG 해시가 전부 같고(`svg.hashsalt` 고정, PDF `CreationDate`·SVG `Date` 제거), 같은 해시가 노트북 실행에서도 재현된다. Fig. 1 래스터도 바이트 동일.
+
+추적 대상도 함께 바로잡았다. 그전에는 `ieee_style.py`(네 스크립트가 모두 import), Fig. 1 벡터 마스터, 노트북, `input/` 이 `.gitignore` 에 걸려 있어 **깨끗한 클론에서는 `import ieee_style` 부터 실패했다**. 이제 재현에 필요한 것은 전부 추적한다(산출물 `output/`·`upload/`·참고문헌 PDF 는 계속 제외).
+
