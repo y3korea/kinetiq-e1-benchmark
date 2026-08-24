@@ -19,6 +19,26 @@ Three reference tiers drive it:
 
 A virtual camera orbiting the mocap skeleton (`yaw_sweep.py`) additionally yields accuracy as a continuous function of camera yaw and pitch.
 
+### The guidance layer under test
+
+The sweep is not only a result. Its thresholds are compiled into the deployed application, which tells the user *during* the measurement whether the camera is placed well enough for the angle it is about to report. These are the three yaw-axis states the shipped build renders in that banner:
+
+![The three yaw-axis camera-alignment states rendered by the deployed KinetiQ build](assets/alignment-guidance.png)
+
+| Band | Shipped bound | Camera yaw | Projection-term knee MAE | Banner text, translated (icon omitted) |
+|---|---|---|---|---|
+| good | `openness ≤ 0.06` | ≤ 10.3° | ≈ 5.7° | "Side alignment good" |
+| fair | `openness ≤ 0.13` | ≤ 22.8° | ≈ 13.3° | "Slightly rotated — turn your body a little more to the side" |
+| poor | beyond that | > 22.8° | > 13.3° | "You are almost facing the camera head-on — stand so you see the camera from the side" |
+
+`openness` is the **mean** of the shoulder and hip horizontal separations over torso height, `(|Lsh.x − Rsh.x| + |Lhip.x − Rhip.x|) / (2 × torso height)`, computed in the isotropic (aspect-corrected) space; `harness/view_metric.cjs` derives it and shows why the aspect correction matters. The two bounds are `KQ_VIEW_GOOD` and `KQ_VIEW_WARN` in the deployed source. The `openness > 0.3` cut recorded in `results/view_metric.json` is a coarser threshold used only to *select* the metric against the labelled corpus; it is not the shipped banner bound.
+
+The yaw and error columns are linearly interpolated between the 5°-spaced rows of `E1_benchmark/results/yaw_sweep.csv` at `pitch = 0`, which this repository regenerates: `yaw 10° → knee MAE 5.50°` and `15° → 7.94°` bracket the good bound, `20° → 11.11°` and `25° → 14.98°` the fair bound. It is a mean-curve calibration, so per-repetition scatter (`openness_sd` 0.012–0.018) is roughly ±2–3° of yaw about each edge. Perfect alignment does not buy zero error: yaw 0° still costs 2.41°, the monocular projection floor.
+
+> **How this was made.** Rendered 2026-08-24 from the deployed `ver7-D7.88` build; the archived results here are pinned to `ver7-D7.85` (`harness/provenance.json`), in which the `kqViewGrade` thresholds and all three label strings are byte-identical. The banner is drawn by the shipped code path (`kqViewGrade` → `updateViewGuide`) with the metric value supplied directly rather than by a camera, so no participant image and no frame from either licensed dataset appears anywhere in this repository. The three bars are composited from three separate renders; the live banner shows one at a time.
+>
+> **Scope.** These are the yaw-axis states only. Where the device exposes an orientation sensor the same banner also carries a camera-height axis: `updateViewGuide` shows whichever axis is worse and merges the two into a single line when both are good, so the green state above is what a device without that sensor shows. `kqViewGrade` has a fourth `unknown` state while the median window fills. The application source is **not** part of this repository — see the next section. The on-screen text is Korean in this build; the English column above is a translation, not a screenshot.
+
 ## What is *not* here
 
 - **The application source.** Only the measurement functions the benchmark executes are included, as extracted by `extract_core.cjs` (`harness/kinetiq_core.generated.js`, `harness/kinetiq_sts.generated.js`). The full platform is a commercial product and stays closed.
@@ -51,6 +71,7 @@ E1_benchmark/
 ├── results/                      per-repetition CSVs and report JSONs (every number in the paper)
 └── device_bench/                 on-device benchmark protocol + analyser
 figures/                          figure-generation scripts (consume results/*.json)
+assets/                           README images (rendered from the shipped UI, no participant data)
 ```
 
 ## Reproducing
