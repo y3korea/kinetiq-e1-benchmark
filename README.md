@@ -96,6 +96,16 @@ python3 yaw_sweep.py         # viewing-angle sweep
 node tier2_stats.cjs         # T2 recording-level bootstrap, Bland–Altman, SRD
 node verify_pose_assets.cjs  # pose-estimator pin: pinned vs unversioned bytes (~100 MB, network)
 python3 tier2_reference_3d.py   # Tier 2 rescored against a 3-D reference (Table V)
+
+# Replay a PRE-fix build, so the paper's "before" column is reproducible too.
+# The application source is not redistributed here, but every build snapshot is
+# publicly served, so the replay below runs from a clean clone of this archive:
+BASE=https://wansukchoi-kbu-squat.vercel.app/versions
+curl -sO --output-dir /tmp $BASE/ver7-D7.67/index.html && mv /tmp/index.html /tmp/D7.67.html
+shasum -a 256 /tmp/D7.67.html   # f80ad60b2f00dab477dc624123412ac2...
+
+node extract_sts.cjs --src /tmp/D7.67.html --out /tmp/sts_d767.js
+node sts_verify.cjs --sts /tmp/sts_d767.js --out ../results/sts_report_precorrection.json
 ```
 
 Every script writes into `results/`; figures are regenerated from those files by `figures/make_figure*.py`. Results are deterministic (fixed bootstrap seeds, video-time clock), so a re-run reproduces the committed outputs byte-for-byte.

@@ -29,8 +29,22 @@
 const fs = require('fs');
 const path = require('path');
 
+// Which build to exercise. The defaults reproduce the published run; the options
+// exist so the PRE-correction build can be replayed as well, which is what makes
+// the "defect" column of the paper's Table I reproducible rather than asserted.
+//   node sts_verify.cjs                                   # shipped build (corrected)
+//   node extract_sts.cjs --src ../../squat-app/versions/ver7-D7.67/index.html --out /tmp/sts_d767.js
+//   node sts_verify.cjs --sts /tmp/sts_d767.js --out ../results/sts_report_precorrection.json
+const argv = process.argv.slice(2);
+const opt = (flag, dflt) => {
+  const i = argv.indexOf(flag);
+  return i >= 0 && argv[i + 1] ? argv[i + 1] : dflt;
+};
+const CORE_MODULE = path.resolve(opt('--core', path.join(__dirname, 'kinetiq_core.generated.js')));
+const STS_MODULE = path.resolve(opt('--sts', path.join(__dirname, 'kinetiq_sts.generated.js')));
+
 require('./harness_shim.js');
-require('./kinetiq_core.generated.js');
+require(CORE_MODULE);
 // The generated files load as ESM here, so `module.exports` never runs and require()
 // yields an empty namespace; the globalThis assignment is the one that takes effect.
 const Core = globalThis.KinetiQCore;
@@ -56,7 +70,7 @@ if (typeof globalThis.speak !== 'function') globalThis.speak = (txt) => { uiCall
 if (typeof globalThis.drawPose !== 'function') globalThis.drawPose = () => {};
 if (typeof globalThis.drawMirroredText !== 'function') globalThis.drawMirroredText = () => {};
 
-require('./kinetiq_sts.generated.js');
+require(STS_MODULE);
 
 const shim = globalThis.KinetiQShim;
 const STS = globalThis.KinetiQSTS.STS;
@@ -208,7 +222,7 @@ const miscounts = s3.filter(x => x.counted !== x.expected);
 console.log(`  S3  ${miscounts.length ? `counting breaks on: ${miscounts.map(m => m.frame).join(', ')}`
   : 'counting holds across all tested frame geometries'}`);
 
-fs.writeFileSync(path.join(outDir, 'sts_report.json'), JSON.stringify({
+fs.writeFileSync(path.resolve(opt('--out', path.join(outDir, 'sts_report.json'))), JSON.stringify({
   experiment: 'E1 Tier 0 — sit-to-stand chain',
   generated: new Date().toISOString(),
   engine_version: PROV.engine_version,
@@ -220,4 +234,4 @@ fs.writeFileSync(path.join(outDir, 'sts_report.json'), JSON.stringify({
     protocol: 'Rikli & Jones 30-second chair stand: score = number of full stands in 30 s' },
   S3_counting: s3,
 }, null, 2));
-console.log('\nwritten: results/sts_report.json');
+console.log('\nwritten: ' + path.relative(process.cwd(), path.resolve(opt('--out', path.join(outDir, 'sts_report.json')))));

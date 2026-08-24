@@ -28,3 +28,5 @@ keywords:
   - MediaPipe
   - reproducibility
 repository-code: "https://github.com/y3korea/kinetiq-e1-benchmark"
+version: "v1.0.3"
+date-released: "2026-08-25"

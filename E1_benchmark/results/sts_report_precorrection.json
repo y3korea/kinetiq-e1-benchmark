@@ -1,0 +1,122 @@
+{
+  "experiment": "E1 Tier 0 — sit-to-stand chain",
+  "generated": "2026-08-24T23:14:20.708Z",
+  "engine_version": "ver7-D7.67",
+  "provenance": {
+    "STS": {
+      "lines": "8979-8990",
+      "bytes": 531,
+      "sha256": "cafd294afb31f720a6baa158d40e79a141eb2327d477f50aa1e3c05d11d3f886"
+    },
+    "onSTSResults": {
+      "lines": "9029-9060",
+      "bytes": 1606,
+      "sha256": "f7380eba42da0825b168b4ea5031432934a920eaf781e26105b5899522ccff19"
+    },
+    "detectSTSPhase": {
+      "lines": "9062-9103",
+      "bytes": 1643,
+      "sha256": "5a3f1208c548632c3081f84686dd6ef59ec2aea60bf8a9789ff44df55aeda0d6"
+    }
+  },
+  "ground_truth": "synthetic kinematics; angles and counts true by construction",
+  "dataset_note": "REHAB24-6 has no sit-to-stand exercise, so no mocap comparison is possible here",
+  "S1_aspect": [
+    {
+      "frame": "square 960x960",
+      "mae": 0,
+      "bias": 0,
+      "per_angle": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "frame": "4:3 1280x960 (production)",
+      "mae": 4.09,
+      "bias": 3.32,
+      "per_angle": [
+        -1.93,
+        4.07,
+        6.73,
+        5.61,
+        2.13
+      ]
+    },
+    {
+      "frame": "16:9 1280x720",
+      "mae": 8.14,
+      "bias": 6.79,
+      "per_angle": [
+        -3.38,
+        9.73,
+        13.56,
+        10.3,
+        3.74
+      ]
+    },
+    {
+      "frame": "9:16 1080x1920",
+      "mae": 7.6,
+      "bias": -5.26,
+      "per_angle": [
+        5.86,
+        -2.9,
+        -10.18,
+        -12.74,
+        -6.35
+      ]
+    }
+  ],
+  "S2_protocol_semantics": {
+    "rows": [
+      {
+        "true_stands": 1,
+        "counted_when_ending_standing": 0,
+        "counted_when_returning_to_sit": 1
+      },
+      {
+        "true_stands": 5,
+        "counted_when_ending_standing": 4,
+        "counted_when_returning_to_sit": 5
+      },
+      {
+        "true_stands": 10,
+        "counted_when_ending_standing": 9,
+        "counted_when_returning_to_sit": 10
+      },
+      {
+        "true_stands": 15,
+        "counted_when_ending_standing": 14,
+        "counted_when_returning_to_sit": 15
+      }
+    ],
+    "undercounts_by_one": true,
+    "protocol": "Rikli & Jones 30-second chair stand: score = number of full stands in 30 s"
+  },
+  "S3_counting": [
+    {
+      "frame": "square 960x960",
+      "expected": 10,
+      "counted": 10
+    },
+    {
+      "frame": "4:3 1280x960 (production)",
+      "expected": 10,
+      "counted": 10
+    },
+    {
+      "frame": "16:9 1280x720",
+      "expected": 10,
+      "counted": 10
+    },
+    {
+      "frame": "9:16 1080x1920",
+      "expected": 10,
+      "counted": 10
+    }
+  ]
+}
