@@ -1,3 +1,8 @@
+SCOPE: This MIT licence covers the SOFTWARE in this repository. It does NOT
+cover the derived result tables under E1_benchmark/results/, which are Adapted
+Material from third-party datasets and carry those datasets' licences
+(REHAB24-6: CC BY-NC 4.0; UI-PRMD: ODC-PDDL v1.0). See DATA_LICENSE.md.
+
 MIT License
 
 Copyright (c) 2026 Seoyoon Heo, Taeseok Choi, Yusung Jang, Wansuk Choi
