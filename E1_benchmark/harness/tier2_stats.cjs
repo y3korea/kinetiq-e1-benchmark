@@ -155,6 +155,25 @@ const point = metrics(recs);
 const ci = k => { const v = dist[k].slice().sort((a, b) => a - b);
   return { lo: r3(v[Math.floor(v.length * 0.025)]), hi: r3(v[Math.floor(v.length * 0.975)]), n_boot: v.length }; };
 
+
+// ── ICC(2,1): 2원 확률효과, 절대일치, 단일 측정 (Shrout & Fleiss 1979) ──
+// Table V 의 비교 대상 세 행이 ICC(2,1) 로 특성화돼 있는데 본 연구만 없어서
+// 같은 잣대로 읽히지 않는다. 앱과 기준을 두 '평가자'로 놓고 반복을 행으로 둔다.
+// 주의: 비교 문헌들과 동일하게 반복 단위로 pool 하므로 녹화 내 군집을 무시한다.
+// 군집을 반영한 불확실성은 위 recording-level 부트스트랩이 담당한다.
+function icc21(pairs) {
+  const n = pairs.length, k = 2;
+  if (n < 3) return null;
+  const gm = mean(pairs.flat());
+  const rowM = pairs.map(p => (p[0] + p[1]) / 2);
+  const colM = [mean(pairs.map(p => p[0])), mean(pairs.map(p => p[1]))];
+  const MSR = k * rowM.reduce((s, m) => s + (m - gm) ** 2, 0) / (n - 1);
+  const MSC = n * colM.reduce((s, m) => s + (m - gm) ** 2, 0) / (k - 1);
+  let ss = 0;
+  pairs.forEach((p, i) => p.forEach((y, j) => { ss += (y - rowM[i] - colM[j] + gm) ** 2; }));
+  const MSE = ss / ((n - 1) * (k - 1));
+  return r3((MSR - MSE) / (MSR + (k - 1) * MSE + (k * (MSC - MSE)) / n));
+}
 // ── Bland-Altman + SRD (전체 / 시상면 / 사면, 무릎·고관절) ──
 function blandAltman(rows, errKey) {
   const d = rows.map(r => r[errKey]);
@@ -180,6 +199,12 @@ function baBoot(filter, errKey) {
 const strata = [
   ['all', () => true], ['sagittal', r => r.view === 'sagittal'], ['oblique', r => r.view === 'oblique'],
 ];
+const iccKnee = {};
+for (const [name, f] of strata) {
+  const rows = recs.flatMap(r => perRec[r].rows).filter(f);
+  iccKnee[name] = { n: rows.length, icc21: icc21(rows.map(r => [r.app_knee, r.ref_knee])) };
+}
+
 const ba = {};
 for (const [name, f] of strata) {
   ba[name] = {
@@ -216,6 +241,11 @@ fs.writeFileSync(path.join(outDir, 'tier2_stats.json'), JSON.stringify({
   point_estimates_verified_against: 'tier2_production.json',
   estimates: Object.fromEntries(keys.map(k => [k, { point: r3(point[k]), ci95: ci(k) }])),
   bland_altman: ba,
+  icc_knee: iccKnee,
+  icc_note: 'ICC(2,1) two-way random effects, absolute agreement, single measurement (Shrout & Fleiss). '
+    + 'Application and reference are the two raters, repetitions the rows. Pooled per repetition as the '
+    + 'Table V comparators do, so within-recording clustering is ignored here; the recording-level '
+    + 'bootstrap above carries the clustered uncertainty.',
   scope_note: 'SRD is derived from the dispersion of error against mocap-derived reference angles, '
     + 'NOT from test-retest repeated measurement; it bounds detectable change under this error model only. '
     + 'One dataset, one camera geometry. Not a clinical validation study.',

@@ -1,6 +1,6 @@
 {
   "experiment": "Tier 2 statistical strengthening: recording-level bootstrap CIs, Bland-Altman agreement, SRD",
-  "generated": "2026-08-22T02:21:53.285Z",
+  "generated": "2026-08-25T08:22:30.936Z",
   "engine_version": "ver7-D7.85",
   "bootstrap": {
     "B": 10000,
@@ -228,5 +228,20 @@
       }
     }
   },
+  "icc_knee": {
+    "all": {
+      "n": 171,
+      "icc21": 0.657
+    },
+    "sagittal": {
+      "n": 97,
+      "icc21": 0.932
+    },
+    "oblique": {
+      "n": 74,
+      "icc21": 0.18
+    }
+  },
+  "icc_note": "ICC(2,1) two-way random effects, absolute agreement, single measurement (Shrout & Fleiss). Application and reference are the two raters, repetitions the rows. Pooled per repetition as the Table V comparators do, so within-recording clustering is ignored here; the recording-level bootstrap above carries the clustered uncertainty.",
   "scope_note": "SRD is derived from the dispersion of error against mocap-derived reference angles, NOT from test-retest repeated measurement; it bounds detectable change under this error model only. One dataset, one camera geometry. Not a clinical validation study."
 }
