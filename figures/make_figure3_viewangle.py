@@ -61,9 +61,9 @@ ax_pitch = axes2[1, 0]
 
 # --- (a) angle error vs yaw ------------------------------------------------
 ax = axes[0]
-for lo, hi, shade in [(0, cal["good_within_yaw_deg"], S.BAND[0]),
+for lo, hi, shade in [(-2.5, cal["good_within_yaw_deg"], S.BAND[0]),
                       (cal["good_within_yaw_deg"], cal["warn_within_yaw_deg"], S.BAND[1]),
-                      (cal["warn_within_yaw_deg"], 90, S.BAND[2])]:
+                      (cal["warn_within_yaw_deg"], 92.5, S.BAND[2])]:
     ax.axvspan(lo, hi, color=shade, lw=0, zorder=0)
 ax.plot(yaw, knee, "o-", color=S.SERIES[0], label="Knee")
 ax.plot(yaw, hip, "s--", color=S.SERIES[1], label="Hip")
@@ -75,7 +75,7 @@ ax.annotate("monocular floor %.1f$\\degree$" % d["baseline_sagittal_knee_mae"],
 
 ax.set_xlabel("Camera yaw from sagittal (deg)")
 ax.set_ylabel("Joint-angle MAE (deg)")
-ax.set_xlim(0, 90); ax.set_ylim(0, 65)
+ax.set_xlim(-2.5, 92.5); ax.set_xticks(range(0, 91, 15)); ax.set_ylim(0, 65)
 ax.xaxis.set_major_locator(MultipleLocator(15))
 ax.legend(loc="upper left")
 S.panel_label(ax, "(a)")
@@ -88,7 +88,7 @@ ax.axhline(0.5, color=S.GRAY, ls=":", lw=0.8)
 ax.text(2, 0.515, "chance", fontsize=7, color=S.GRAY, ha="left", va="bottom", bbox=S.HALO, zorder=5)
 ax.set_xlabel("Camera yaw from sagittal (deg)")
 ax.set_ylabel("Recall / AUC")
-ax.set_xlim(0, 90); ax.set_ylim(0, 1.05)
+ax.set_xlim(-2.5, 92.5); ax.set_xticks(range(0, 91, 15)); ax.set_ylim(0, 1.05)
 ax.xaxis.set_major_locator(MultipleLocator(15))
 ax.legend(loc="lower left")
 S.panel_label(ax, "(b)")
@@ -105,7 +105,7 @@ for key, label, ytext in [("good", "good 0.06 (10$\\degree$, knee 5.7$\\degree$)
     ax.text(88, thr + 0.010, label, fontsize=7, color=S.INK, ha="right", va="bottom", bbox=S.HALO, zorder=5)
 ax.set_xlabel("Camera yaw from sagittal (deg)")
 ax.set_ylabel("Alignment metric (openness)")
-ax.set_xlim(0, 90); ax.set_ylim(0, 0.38)
+ax.set_xlim(-2.5, 92.5); ax.set_xticks(range(0, 91, 15)); ax.set_ylim(-0.012, 0.38); ax.set_yticks([0, 0.1, 0.2, 0.3])
 ax.xaxis.set_major_locator(MultipleLocator(15))
 S.panel_label(ax, "(d)")
 
