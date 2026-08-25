@@ -84,11 +84,19 @@ for ax, (title, x, y, k, col, subj) in zip(axes, panels):
             ax.scatter(xs, ys, s=9, marker=MARKERS[i % len(MARKERS)], facecolors="none",
                        edgecolors=S.INK, linewidths=0.45, zorder=2)
         ps = rep["per_subject"]["10"]      # the offset cluster: almost entirely projection
-        ax.annotate("subject 10: chain %+.1f$\\degree$,\nprojection %+.1f$\\degree$"
-                    % (ps["chain_bias_2d"], ps["projection_floor"]),
-                    xy=(82, 13.0), xytext=(0.03, 0.95), textcoords="axes fraction", fontsize=7,
-                    ha="left", va="top", bbox=S.HALO, zorder=5,
-                    arrowprops=dict(arrowstyle="-", color=S.GRAY, lw=0.6))
+        # No leader line. Subject 10's twenty repetitions span the whole x range, so a
+        # line to any one of them reads as a claim about that point rather than about
+        # the subject, and the panel already carries four horizontal rules that a
+        # headless leader is easily mistaken for. The marker glyph locates the subject
+        # instead, which is what a reader actually needs here since there is no legend.
+        MARKER_NAMES = {"o": "circles", "s": "squares", "^": "up triangles",
+                        "v": "down triangles", "D": "diamonds", "<": "left triangles",
+                        ">": "right triangles", "P": "plus", "X": "cross", "*": "stars"}
+        m10 = MARKER_NAMES[MARKERS[sorted(set(subj)).index(10) % len(MARKERS)]]
+        ax.text(0.03, 0.95, "subject 10 (%s): chain %+.1f$\\degree$,\nprojection %+.1f$\\degree$"
+                % (m10, ps["chain_bias_2d"], ps["projection_floor"]),
+                transform=ax.transAxes, fontsize=7, ha="left", va="top",
+                bbox=S.HALO, zorder=5)
     ax.axhline(0, color=S.GRAY, lw=0.6, ls=":", zorder=1)
     ax.axhline(k["bias"], color=S.INK, lw=0.9, zorder=3)
     ax.annotate("bias %+.1f$\\degree$" % k["bias"], xy=(0.015, k["bias"]),
