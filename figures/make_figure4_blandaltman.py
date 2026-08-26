@@ -68,9 +68,9 @@ for ax, view in zip(axes, ["sagittal", "oblique"]):
                edgecolors=COL[view], linewidths=0.5, zorder=2)
     ax.axhline(0, color=S.GRAY, lw=0.6, ls=":", zorder=1)
     ax.axhline(k["bias"], color=S.INK, lw=0.9, zorder=3)
-    ax.annotate("bias %+.1f$\\degree$" % k["bias"], xy=(0.015, k["bias"]),
+    ax.annotate("bias %+.1f$\\degree$" % k["bias"], xy=(0.035, k["bias"]),
                 xycoords=("axes fraction", "data"), xytext=(0, 2.5), textcoords="offset points",
-                fontsize=7, va="bottom", ha="left", zorder=5, bbox=S.HALO)
+                fontsize=7, va="bottom", ha="left", zorder=5, bbox=S.HALO_SOFT)
     for loa in (k["loa_lower"], k["loa_upper"]):
         ax.axhline(loa, color=S.INK, lw=0.7, ls="--", zorder=3)
     ax.text(0.99, 0.03,

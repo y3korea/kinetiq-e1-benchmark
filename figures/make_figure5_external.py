@@ -99,16 +99,16 @@ for ax, (title, x, y, k, col, subj) in zip(axes, panels):
                 bbox=S.HALO, zorder=5)
     ax.axhline(0, color=S.GRAY, lw=0.6, ls=":", zorder=1)
     ax.axhline(k["bias"], color=S.INK, lw=0.9, zorder=3)
-    ax.annotate("bias %+.1f$\\degree$" % k["bias"], xy=(0.015, k["bias"]),
+    ax.annotate("bias %+.1f$\\degree$" % k["bias"], xy=(0.035, k["bias"]),
                 xycoords=("axes fraction", "data"), xytext=(0, 2.5), textcoords="offset points",
-                fontsize=7, va="bottom", ha="left", zorder=5, bbox=S.HALO)
+                fontsize=7, va="bottom", ha="left", zorder=5, bbox=S.HALO_SOFT)
     for loa in (k["loa_lower"], k["loa_upper"]):
         ax.axhline(loa, color=S.INK, lw=0.7, ls="--", zorder=3)
     ax.set_xlabel("Mean of app and 3-D reference knee angle (deg)")
     ax.text(0.99, 0.03, "MAE %.2f$\\degree$\nLoA [%.1f, %.1f]$\\degree$\nSRD %.1f$\\degree$"
             % (k["mae"], k["loa_lower"], k["loa_upper"], k["srd"]),
             transform=ax.transAxes, va="bottom", ha="right", fontsize=7,
-            linespacing=1.35, zorder=5, bbox=S.HALO)
+            linespacing=1.35, zorder=5, bbox=S.HALO_SOFT)
     S.panel_label(ax, "(%s) %s, n=%d" % ("a" if subj is None else "b", title.split("  (")[0], k["n"]), x=0.0)
 axes[0].set_ylabel("App $-$ 3-D anatomical reference (deg)")
 fig.tight_layout(pad=0.6, w_pad=1.6)

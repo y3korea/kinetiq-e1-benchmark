@@ -101,7 +101,7 @@ for key, label, ytext in [("good", "good 0.06 (10$\\degree$, knee 5.7$\\degree$)
     thr = cal["%s_threshold" % key]; deg = cal["%s_within_yaw_deg" % key]
     mae = cal["%s_boundary_knee_mae" % key]
     ax.axhline(thr, color=S.GRAY, ls="--", lw=0.8)
-    ax.plot([deg], [thr], "o", color=S.INK, ms=4, mec="white", mew=0.8, zorder=5)
+    ax.plot([deg], [thr], "o", color=S.INK, ms=4, mec="none", zorder=5)
     ax.text(88, thr + 0.010, label, fontsize=7, color=S.INK, ha="right", va="bottom", bbox=S.HALO, zorder=5)
 ax.set_xlabel("Camera yaw from sagittal (deg)")
 ax.set_ylabel("Alignment metric (openness)")

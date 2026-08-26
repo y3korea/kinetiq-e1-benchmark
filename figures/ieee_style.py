@@ -24,6 +24,8 @@ BAND = ["#fafafa", "#f0f0f0", "#e6e6e6"]           # guidance bands, light → d
 # figures label the feature they describe rather than moving the label away from it;
 # the halo keeps the glyphs readable without hiding where the label points.
 HALO = dict(facecolor="white", edgecolor="none", pad=1.2)
+# For labels placed inside data fields: translucent so markers show through instead of being clipped.
+HALO_SOFT = dict(facecolor="white", edgecolor="none", pad=1.2, alpha=0.72)
 
 RC = {
     "font.family": "serif",
